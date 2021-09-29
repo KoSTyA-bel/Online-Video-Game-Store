@@ -1,0 +1,51 @@
+﻿@model GameStore.Models.RegisterModel
+
+<script>
+    function toggleShowPassword() {
+        var passwordTextBox = document.getElementById("passwordTextBox");
+        if (passwordTextBox.getAttribute("type") == "text") {
+            passwordTextBox.type = "password";
+        }
+        else {
+            passwordTextBox.type = "text";
+        }
+    }
+
+    function toggleShowConfirmPassword() {
+        var confirmPasswordTextBox = document.getElementById("confirmPasswordTextBox");
+        if (confirmPasswordTextBox.getAttribute("type") == "text") {
+            confirmPasswordTextBox.type = "password";
+        }
+        else {
+            confirmPasswordTextBox.type = "text";
+        }
+    }
+</script>
+
+<h2>Регистрация</h2>
+
+<form asp-action="Register" asp-controller="Account" asp-antiforgery="true">
+    <div class="validation" asp-validation-summary="All"></div>
+    <div>
+        <div>
+            <label asp-for="Login">Введите никнэйм</label><br />
+            <input type="text" asp-for="Login" />
+            <span asp-validation-for="Login" />
+        </div>
+        <div>
+            <label asp-for="Password">Введите пароль</label><br />
+            <input id="passwordTextBox" type="password" asp-for="Password" />
+            <a href="#" onclick="toggleShowPassword(); return false">0</a>
+            <span asp-validation-for="Password" />
+        </div>
+        <div>
+            <label asp-for="ConfirmPassword">Повторите пароль</label><br />
+            <input id="confirmPasswordTextBox" type="password" asp-for="ConfirmPassword" />
+            <a href="#" onclick="toggleShowConfirmPassword(); return false">0</a>
+            <span asp-validation-for="ConfirmPassword" />
+        </div>
+        <div>
+            <input type="submit" value="Регистрация" />
+        </div>
+    </div>
+</form>

@@ -1,0 +1,30 @@
+﻿@model GameStore.Models.ProductModel
+
+<h2>Создание продукта</h2>
+
+<form asp-action="Create" asp-controller="Product" asp-antiforgery="true" enctype="multipart/form-data">
+    <div class="validation" asp-validation-summary="All"></div>
+    <div>
+        <label asp-for="Name">Введите название продукта</label>
+        <input type="text" asp-for="Name" />
+        <span asp-validation-for="Name" />
+    </div>
+    <div>
+        <label asp-for="Discription">Введите название продукта</label>
+        <input type="text" asp-for="Discription" />
+        <span asp-validation-for="Discription" />
+    </div>
+    <div>
+        <label asp-for="Price">Введите название продукта</label>
+        <input type="number" asp-for="Price" />
+        <span asp-validation-for="Price" />
+    </div>
+    <div>
+        <label asp-for="Picture">Выберите файл картинки продукта</label>
+        <input type="file" asp-for="Picture" />
+        <span asp-validation-for="Picture" />
+    </div>
+    <div>
+        <input type="submit" value="Создать" />
+    </div>
+</form>
