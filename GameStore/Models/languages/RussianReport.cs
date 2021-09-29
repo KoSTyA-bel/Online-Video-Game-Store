@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassesForGameStore.languages
+namespace GameStore.languages
 {
     public class RussianReport : IReport
     {
