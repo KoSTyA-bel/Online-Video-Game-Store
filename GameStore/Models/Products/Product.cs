@@ -15,6 +15,6 @@ namespace GameStore.Models
 
         public decimal Price { get; set; }
 
-        public byte[] Picture { get; set; }
+        public string PathToPicture { get; set; }
     }
 }

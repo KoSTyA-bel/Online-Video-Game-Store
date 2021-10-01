@@ -37,6 +37,7 @@ namespace GameStore
 
             // Добавляем сервис для работы с пользователями.
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IProductService, ProductService>();
 
             // Добавляем обраотчик аккаунтов(Верификация аккаунтов).
             services.AddTransient<IReport, EnglishReport>();

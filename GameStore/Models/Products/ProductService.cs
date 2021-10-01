@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -85,5 +86,26 @@ namespace GameStore.Models
 
             return product is null;
         }
+
+        public bool CreateProduct(string name, string description, decimal price, string pathToPicture)
+        {
+            if (_context.Products.Where(p => p.Name == name).Count() != 0)
+            {
+                return false;
+            }
+
+            var product = new Product()
+            {
+                Name = name,
+                Description = description,
+                Price = price,
+                PathToPicture = pathToPicture,
+            };
+
+            _context.Products.Add(product);
+
+            return _context.SaveChanges() == 1;
+        }
+
     }
 }
