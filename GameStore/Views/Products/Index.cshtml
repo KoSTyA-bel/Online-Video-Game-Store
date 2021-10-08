@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <form method="post">
+        <div class="validation" asp-validation-summary="All"></div>
+        <label>Ключевые слова для поиска продукта</label><br />
+        <input type="text" name="name" /><br />
+        <input type="submit" value="Найти" />
+    </form>
+    <div>
+        <p>Products</p>
+        @if (User.IsInRole("admin"))
+        {
+            <a href="Product/Create">Добавить продукт.</a>
+        }
+    </div>
+    @foreach (var product in Model)
+    {
+        <a href="Product/@product.Id">
+            <div><img src="@product.PathToPicture" width="100" height="100" /></div>
+            <div>@product.Name</div>
+            <div>@product.Description</div>
+            <div>@product.Price</div>
+        </a>
+    }
+</body>
+</html>

@@ -1,23 +1,21 @@
 ﻿using GameStore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace GameStore.Controllers
 {
-    public class ProductController : Controller
+    public class ProductsController : Controller
     {
         private const long BYTES_OF_10_MB = 10485760;
         private IProductService _service;
         private IWebHostEnvironment _appEnvironment;
 
-        public ProductController(IWebHostEnvironment appEnvironment, IProductService service)
+        public ProductsController(IWebHostEnvironment appEnvironment, IProductService service)
         {
             _appEnvironment = appEnvironment ?? throw new ArgumentNullException(nameof(appEnvironment));
             _service = service ?? throw new ArgumentNullException(nameof(service));
@@ -26,12 +24,37 @@ namespace GameStore.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            ViewBag.Products = _service.GetAllProducts();
+            return View(_service.GetAllProducts());
+        }
 
-            return View();
+        [HttpPost]
+        public ActionResult Index(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                ModelState.AddModelError("", "Строка пустая.");
+                return Index();
+            }
+
+            name = name.ToUpper();
+            
+            return View(_service.GetAllProducts().Where(product => product.Name.ToUpper().Contains(name)));
         }
 
         [HttpGet]
+        [Route("Product/{id}")]
+        public ActionResult Index(int id)
+        {
+            if (_service.TryShowProduct(id, out Product product))
+            {
+                return View("Product", product);
+            }
+
+            return Redirect("/Products");
+        }
+
+        [HttpGet]
+        [Route("Product/Create")]
         [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
@@ -39,6 +62,7 @@ namespace GameStore.Controllers
         }
 
         [HttpPost]
+        [Route("Product/Create")]
         [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Models.ProductModel model)
@@ -74,7 +98,7 @@ namespace GameStore.Controllers
                 }
             }
 
-            return Redirect("/Product");
+            return Redirect($"/Product/{_service.GetAllProducts().Last().Id}");
         }
     }
 }

@@ -84,7 +84,7 @@ namespace GameStore.Models
         {
             product = _context.Products.Where(x => x.Id == id).FirstOrDefault();
 
-            return product is null;
+            return !(product is null);
         }
 
         public bool CreateProduct(string name, string description, decimal price, string pathToPicture)

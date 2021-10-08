@@ -31,7 +31,7 @@ namespace GameStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(Models.LoginModel model)
+        public async Task<IActionResult> Login(Models.LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -52,7 +52,12 @@ namespace GameStore.Controllers
                     {
                         await Authenticate(user); // аутентификация
 
-                        return RedirectToAction("Index", "Home");
+                        if (string.IsNullOrEmpty(returnUrl))
+                        {
+                            returnUrl = "/";
+                        }
+
+                        return Redirect(returnUrl);
                     }
 
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
@@ -126,7 +131,7 @@ namespace GameStore.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Index", "Products");
         }
     }
 }

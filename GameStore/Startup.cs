@@ -66,7 +66,7 @@ namespace GameStore
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}");
+                    pattern: "{controller=Products}/{action=Index}");
             });
         }
     }

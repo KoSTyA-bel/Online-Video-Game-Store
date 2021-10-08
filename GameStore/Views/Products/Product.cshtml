@@ -1,0 +1,25 @@
+﻿@model Product
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div>
+        <div>
+            <p><img src="@Model.PathToPicture" /></p>
+        </div>
+        <div>
+            <p>@Model.Name</p>
+        </div>
+        <div>
+            <p>@Model.Description</p>
+        </div>
+        <div>
+            <p>@Model.Price</p>
+        </div>
+    </div>
+</body>
+</html>
