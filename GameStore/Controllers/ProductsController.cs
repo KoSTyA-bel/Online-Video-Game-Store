@@ -117,4 +117,4 @@ namespace GameStore.Controllers
             return Redirect($"/Product/{_service.GetAllProducts().Last().Id}");
         }
     }
-}d
+}
