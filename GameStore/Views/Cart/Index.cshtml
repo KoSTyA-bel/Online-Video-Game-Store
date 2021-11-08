@@ -1,0 +1,29 @@
+﻿@model Cart
+
+<div>
+    @if (Model.CartLines.Count == 0)
+            {
+                <div>Корзина пуста</div>
+            }
+    @foreach (var element in Model.CartLines)
+            {
+                <div>
+                    <div><img src="@element.Product.PathToPicture" width="100" height="100" /></div>
+                    <div>Наименованине продукта: @element.Product.Name</div>
+                    <div>Количество: @element.Quantity</div>
+                    <div>Стоимость за еденицу товара: @element.Product.Price</div>
+                    <div>Итоговая стоимость: @(element.Product.Price * element.Quantity)</div>
+                    @using (Html.BeginForm("RemoveProductFromCart", "Cart"))
+                        {
+                            <div>
+                                @{ 
+                                    int id = element.Product.Id;
+                                }
+                                @Html.HiddenFor(x => id)
+                                @Html.Hidden("returnUrl", $"/Cart")
+                                <input type="submit" class="btn btn-success" value="Убрать из корзины" />
+                            </div>
+                        }
+                </div>
+            }
+</div>

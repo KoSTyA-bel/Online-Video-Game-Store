@@ -29,18 +29,18 @@
     <div>
         <div>
             <label asp-for="Login">Введите никнэйм</label><br />
-            <input type="text" asp-for="Login" />
+            <input type="text" asp-for="Login" pattern="[A-Za-z0-9_]{4,20}"/>
             <span asp-validation-for="Login" />
         </div>
         <div>
             <label asp-for="Password">Введите пароль</label><br />
-            <input id="passwordTextBox" type="password" asp-for="Password" />
+            <input id="passwordTextBox" type="password" asp-for="Password" required pattern="[A-Za-z0-9]{6,20}" />
             <a href="#" onclick="toggleShowPassword(); return false">0</a>
             <span asp-validation-for="Password" />
         </div>
         <div>
             <label asp-for="ConfirmPassword">Повторите пароль</label><br />
-            <input id="confirmPasswordTextBox" type="password" asp-for="ConfirmPassword" />
+            <input id="confirmPasswordTextBox" type="password" asp-for="ConfirmPassword" required pattern="[A-Za-z0-9]{6,20}" />
             <a href="#" onclick="toggleShowConfirmPassword(); return false">0</a>
             <span asp-validation-for="ConfirmPassword" />
         </div>

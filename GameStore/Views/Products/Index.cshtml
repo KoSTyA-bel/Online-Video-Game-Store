@@ -1,36 +1,48 @@
-﻿@model IEnumerable<Product>
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-</head>
-<body>
-    <form method="post">
-        <div class="validation" asp-validation-summary="All"></div>
-        <label>Ключевые слова для поиска продукта</label><br />
-        <input type="text" name="name" /><br />
-        <input type="submit" value="Найти" />
-    </form>
+<body onload="searchProducts()">
     <div>
-        <p>Products</p>
         @if (User.IsInRole("admin"))
         {
             <a href="Product/Create">Добавить продукт.</a>
         }
     </div>
-    @foreach (var product in Model)
-    {
-        <a href="Product/@product.Id">
-            <div><img src="@product.PathToPicture" width="100" height="100" /></div>
-            <div>@product.Name</div>
-            <div>@product.Description</div>
-            <div>@product.Price</div>
-        </a>
-    }
+    <div>
+        <form>
+            <input type="text" name="name" id="search" maxlength="100" />
+            <input type='button' id="submit" value="Поиск" onclick="searchProducts()" />
+            <input type="button" id="reset" value="Сбросить" onclick="clearData()">
+        </form>
+        <div id="results"></div>
+        <script type="text/javascript">
+            function searchProducts() {
+                var name = $('#search').val();
+                name = encodeURIComponent(name);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Search", "Products")?name=' + name,
+                    success: function (products) {
+                        document.getElementById("results").innerHTML = products;
+                    }
+                });
+
+                if (name == '') {
+                    document.getElementById('reset').hidden = true;
+                }
+                else {
+                    document.getElementById('reset').hidden = false;
+                }
+                
+            }
+
+            function clearData() {
+                $('#search').val('');
+                searchProducts();
+            }
+        </script>
+    </div>
+
 </body>
-</html>

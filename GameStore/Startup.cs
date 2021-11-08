@@ -39,9 +39,9 @@ namespace GameStore
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProductService, ProductService>();
 
-            // Добавляем обраотчик аккаунтов(Верификация аккаунтов).
-            services.AddTransient<IReport, EnglishReport>();
             services.AddTransient<AccountValidator>();
+
+            services.AddSession();
 
             // Установка конфигурации подключения.
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -59,8 +59,11 @@ namespace GameStore
 
             app.UseRouting();
 
-            app.UseAuthentication();    // аутентификация
-            app.UseAuthorization();     // авторизация
+            app.UseAuthentication();    
+            
+            app.UseAuthorization();     
+            
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

@@ -20,8 +20,6 @@ namespace GameStore.Models.Users
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
-
             modelBuilder.Entity<Role>().HasKey(u => u.Id);
             modelBuilder.Entity<User>().HasKey(u => u.Id);
             

@@ -21,5 +21,13 @@
             <p>@Model.Price</p>
         </div>
     </div>
+    @using (Html.BeginForm("AddProductToCart", "Cart"))
+    {
+        <div>
+            @Html.HiddenFor(x => Model.Id)
+            @Html.Hidden("returnUrl", $"/Products?id={Model.Id}")
+            <input type="submit" class="btn btn-success" value="Добавить в корзину" />
+        </div>
+    }
 </body>
 </html>

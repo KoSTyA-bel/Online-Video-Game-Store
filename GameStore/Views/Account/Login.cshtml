@@ -20,12 +20,12 @@
     <div>
         <div class="form-group">
             <label asp-for="Login">Введите никнэйм</label>
-            <input type="text" asp-for="Login" />
+            <input type="text" asp-for="Login" required pattern="[A-Za-z0-9_]{4,20}" />
             <span asp-validation-for="Login" />
         </div>
         <div class="form-group">
             <label asp-for="Password">Введите пароль</label>
-            <input id="passwordTextBox" type="password" asp-for="Password" />
+            <input id="passwordTextBox" type="password" asp-for="Password" required pattern="[A-Za-z0-9]{6,20}" />
             <a href="#" onclick="toggleShowPassword(); return false">0</a>
             <span asp-validation-for="Password" />
         </div>

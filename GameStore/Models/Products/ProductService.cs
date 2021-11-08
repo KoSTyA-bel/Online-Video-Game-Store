@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace GameStore.Models
     public class ProductService : IProductService
     {
         private ProductContext _context;
+        private DbContextOptions options;
 
         public ProductService(ProductContext context)
         {
@@ -22,7 +24,6 @@ namespace GameStore.Models
                 throw new ArgumentNullException(nameof(product));
             }
 
-
             if (_context.Products.Contains(product))
             {
                 return false;
@@ -32,7 +33,6 @@ namespace GameStore.Models
 
             _context.SaveChanges();
 
-
             return true;
         }
 
@@ -40,7 +40,6 @@ namespace GameStore.Models
 
         public bool RemoveProduct(Product product)
         {
-
             if (_context.Products.Contains(product))
             {
                 _context.Remove(product);
@@ -49,7 +48,6 @@ namespace GameStore.Models
                 return true;
             }
 
-
             return false;
         }
 
@@ -57,27 +55,23 @@ namespace GameStore.Models
         {
             if (product is null)
             {
-                throw new ArgumentNullException(nameof(product));
-                //return false;
+                //throw new ArgumentNullException(nameof(product));
+                return false;
             }
-
 
             var productToUpdate = _context.Products.Where(x => x.Id == product.Id).FirstOrDefault();
 
             if (productToUpdate is null)
             {
-                throw new ArgumentNullException(nameof(product));
-                //return false;
+                //throw new ArgumentNullException(nameof(product));
+                return false;
             }
 
             productToUpdate.Name = product.Name;
             productToUpdate.Description = product.Description;
             productToUpdate.Price = product.Price;
 
-            _context.SaveChanges();
-
-
-            return true;
+            return _context.SaveChanges() == 1;
         }
 
         public bool TryShowProduct(int id, out Product product)
@@ -106,6 +100,5 @@ namespace GameStore.Models
 
             return _context.SaveChanges() == 1;
         }
-
     }
 }

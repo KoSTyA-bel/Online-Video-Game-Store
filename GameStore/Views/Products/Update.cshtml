@@ -1,29 +1,26 @@
-﻿@model GameStore.Models.ProductModel
+﻿@model GameStore.Models.Product
 
-<h2>Создание продукта</h2>
+<h2>Обновление данных о продукте</h2>
 
-<form asp-action="Create" asp-controller="Products" asp-antiforgery="true" enctype="multipart/form-data">
+<form asp-action="Update" asp-controller="Products" asp-antiforgery="true" enctype="multipart/form-data">
     <div class="validation" asp-validation-summary="All"></div>
     <div>
         <label asp-for="Name">Введите название продукта</label>
-        <input type="text" asp-for="Name" />
+        <input type="text" asp-for="Name" value="@Model.Name"/>
         <span asp-validation-for="Name" />
     </div>
     <div>
         <label asp-for="Description">Введите описание продукта</label>
-        <input type="text" asp-for="Description" />
+        <input type="text" asp-for="Description" value="@Model.Description"/>
         <span asp-validation-for="Description" />
     </div>
     <div>
         <label asp-for="Price">Введите стоимость продукта</label>
-        <input type="number" asp-for="Price" />
+        <input type="number" asp-for="Price" value="@Model.Price"/>
         <span asp-validation-for="Price" />
     </div>
-    <div>
-        <label asp-for="Picture">Выберите файл картинки продукта</label>
-        <input type="file" asp-for="Picture" />
-        <span asp-validation-for="Picture" />
-    </div>
+    <input asp-for="Id" value="@Model.Id" hidden="hidden"/>
+    <input asp-for="PathToPicture" value="@Model.PathToPicture" hidden="hidden"/>
     <div>
         <input type="submit" value="Создать" />
     </div>

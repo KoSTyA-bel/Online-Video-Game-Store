@@ -6,6 +6,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace GameStore.Controllers
 {
@@ -20,32 +22,16 @@ namespace GameStore.Controllers
             _appEnvironment = appEnvironment ?? throw new ArgumentNullException(nameof(appEnvironment));
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
-        
-        [HttpGet]
-        public ActionResult Index()
-        {
-            return View(_service.GetAllProducts());
-        }
 
-        [HttpPost]
-        public ActionResult Index(string name)
+        [HttpGet]
+        public ActionResult Index(int? id)
         {
-            if (string.IsNullOrEmpty(name))
+            if (id is null)
             {
-                ModelState.AddModelError("", "Строка пустая.");
-                return Index();
+                return View();
             }
 
-            name = name.ToUpper();
-            
-            return View(_service.GetAllProducts().Where(product => product.Name.ToUpper().Contains(name)));
-        }
-
-        [HttpGet]
-        [Route("Product/{id}")]
-        public ActionResult Index(int id)
-        {
-            if (_service.TryShowProduct(id, out Product product))
+            if (_service.TryShowProduct((int)id, out Product product))
             {
                 return View("Product", product);
             }
@@ -53,8 +39,20 @@ namespace GameStore.Controllers
             return Redirect("/Products");
         }
 
+        [HttpPost]
+        public ActionResult Search(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return PartialView(_service.GetAllProducts());
+            }
+
+            name = name.ToUpper();
+
+            return PartialView(_service.GetAllProducts().Where(product => product.Name.ToUpper().Contains(name)));
+        }
+
         [HttpGet]
-        [Route("Product/Create")]
         [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
@@ -62,7 +60,6 @@ namespace GameStore.Controllers
         }
 
         [HttpPost]
-        [Route("Product/Create")]
         [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Models.ProductModel model)
@@ -84,13 +81,13 @@ namespace GameStore.Controllers
             else
             {
                 string picture = "images/" + model.Picture.FileName;
-                string path =  Path.Combine(_appEnvironment.WebRootPath, picture);
+                string path = Path.Combine(_appEnvironment.WebRootPath, picture);
 
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {
                     await model.Picture.CopyToAsync(fileStream);
 
-                    if (!_service.CreateProduct(model.Name, model.Discription, model.Price, picture))
+                    if (!_service.CreateProduct(model.Name, model.Description, model.Price, picture))
                     {
                         ModelState.AddModelError("", "Невозможно создать новыйпродукт.");
                         return View();
@@ -100,5 +97,24 @@ namespace GameStore.Controllers
 
             return Redirect($"/Product/{_service.GetAllProducts().Last().Id}");
         }
+
+        [HttpGet]
+        [Authorize(Roles = "admin")]
+        [Route("Update/{id}")]
+        public ActionResult Update(int id)
+        {
+            _service.TryShowProduct(id, out Product product);
+            return View(product);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(Product model)
+        {
+            _service.UpdateProduct(model);
+
+            return Redirect($"/Product/{_service.GetAllProducts().Last().Id}");
+        }
     }
-}
+}d
