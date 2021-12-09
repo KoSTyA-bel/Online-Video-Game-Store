@@ -6,15 +6,8 @@ using System.Threading.Tasks;
 
 namespace GameStore.Models
 {
-    public class RegisterModel
+    public class RegisterModel : LoginModel
     {
-        [Required(ErrorMessage = "Не указан Никнэйм")]
-        public string Login { get; set; }
-
-        [Required(ErrorMessage = "Не указан пароль")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "Пароль не подтверждён")]
         public string ConfirmPassword { get; set; }

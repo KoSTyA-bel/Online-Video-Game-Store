@@ -13,17 +13,10 @@
                     <div>Количество: @element.Quantity</div>
                     <div>Стоимость за еденицу товара: @element.Product.Price</div>
                     <div>Итоговая стоимость: @(element.Product.Price * element.Quantity)</div>
-                    @using (Html.BeginForm("RemoveProductFromCart", "Cart"))
-                        {
-                            <div>
-                                @{ 
-                                    int id = element.Product.Id;
-                                }
-                                @Html.HiddenFor(x => id)
-                                @Html.Hidden("returnUrl", $"/Cart")
-                                <input type="submit" class="btn btn-success" value="Убрать из корзины" />
-                            </div>
-                        }
+                    <form asp-controller="Cart" asp-action="RemoveProductFromCart" >
+                        <input name="id" value="@element.Product.Id" hidden="hidden" />
+                        <input type="submit" class="btn-success" value="Убрать из корзины" />
+                    </form>
                 </div>
             }
 </div>

@@ -1,15 +1,11 @@
 ﻿@model Product
 
-<!DOCTYPE html>
+<link rel="stylesheet" href="~/css/Products.css" />
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-</head>
 <body>
     <div>
-        <div>
-            <p><img src="@Model.PathToPicture" /></p>
+        <div style="margin:auto">
+            <img src="@Model.PathToPicture" class="productPicture"/>
         </div>
         <div>
             <p>@Model.Name</p>
@@ -21,13 +17,29 @@
             <p>@Model.Price</p>
         </div>
     </div>
-    @using (Html.BeginForm("AddProductToCart", "Cart"))
+    @if (User.Identity.IsAuthenticated)
     {
-        <div>
-            @Html.HiddenFor(x => Model.Id)
-            @Html.Hidden("returnUrl", $"/Products?id={Model.Id}")
-            <input type="submit" class="btn btn-success" value="Добавить в корзину" />
-        </div>
+        <form id="addForm" asp-action="AddProductToCart" asp-controller="Cart">
+            <input type="number" id="addFormId" name="id" value="@Model.Id" hidden="hidden"/>
+            <input type="submit" class="btn-success" value="Добавить продукт в корзину" />
+        </form>
+        <div id="result"></div>
     }
+    else
+    {
+        <p>Требуется войти в систему чтобы добавить продукт в корзину.</p>
+    }
+
+    @if (User.IsInRole("admin"))
+            {
+                <form asp-controller="Products" asp-action="Update" method="get">
+                    <input type="number" name="id" value="@Model.Id" hidden="hidden" />
+                    <input type="submit" value="Изменить" /> 
+                </form>
+                <form asp-controller="Products" asp-action="Delete" id="delete">
+                    <input type="number" id="id" value="@Model.Id" hidden="hidden" />
+                    <input type="submit" value="Удалить" />
+                </form>
+            }
+
 </body>
-</html>

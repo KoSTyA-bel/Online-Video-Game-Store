@@ -29,48 +29,33 @@ namespace GameStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProductToCart(int id, string returnUrl)
+        public IActionResult AddProductToCart(int id)
         {
             var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
 
             if (_productService.TryShowProduct(id, out Product product))
             {
-                var cartline = cart.CartLines.Where(x => x.Product.Equals(product)).FirstOrDefault();
-                if (cartline is null)
-                {
-                    cart.CartLines.Add(new CartLine() { Product = product, Quantity = 1 });
-                }
-                else
-                {
-                    cart.CartLines.Remove(cartline);
-
-                    cartline.Quantity++;
-                    cart.CartLines.Add(cartline);
-                }
+                cart.AddProductToCart(product);
             }
 
             HttpContext.Session.Set<Cart>("Cart", cart);
 
-            return Redirect(returnUrl);
+            return Accepted((object)"Продукт успешно добавлен");
         }
 
         [HttpPost]
-        public IActionResult RemoveProductFromCart(int id, string returnUrl)
+        public IActionResult RemoveProductFromCart(int id)
         {
             var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
 
             if (_productService.TryShowProduct(id, out Product product))
             {
-                var cartline = cart.CartLines.Where(x => x.Product.Equals(product)).FirstOrDefault();
-                if (cartline != null)
-                {
-                    cart.CartLines.Remove(cartline);
-                }
+                cart.RemoveProductFromCart(product);
             }
 
             HttpContext.Session.Set<Cart>("Cart", cart);
 
-            return Redirect(returnUrl);
+            return NotFound();
         }
     }
 }

@@ -2,13 +2,17 @@
     ViewData["Title"] = "Home Page";
 }
 
+<link rel="stylesheet" href="~/css/Products.css" />
+
 <body onload="searchProducts()">
     <div>
         @if (User.IsInRole("admin"))
         {
-            <a href="Product/Create">Добавить продукт.</a>
+            <form asp-controller="Products" asp-action="Create" method="get">
+                <input type="submit" value="Добавить продукт" />
+            </form>
         }
-    </div>
+        </div>
     <div>
         <form>
             <input type="text" name="name" id="search" maxlength="100" />
@@ -16,33 +20,6 @@
             <input type="button" id="reset" value="Сбросить" onclick="clearData()">
         </form>
         <div id="results"></div>
-        <script type="text/javascript">
-            function searchProducts() {
-                var name = $('#search').val();
-                name = encodeURIComponent(name);
-
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Search", "Products")?name=' + name,
-                    success: function (products) {
-                        document.getElementById("results").innerHTML = products;
-                    }
-                });
-
-                if (name == '') {
-                    document.getElementById('reset').hidden = true;
-                }
-                else {
-                    document.getElementById('reset').hidden = false;
-                }
-                
-            }
-
-            function clearData() {
-                $('#search').val('');
-                searchProducts();
-            }
-        </script>
     </div>
 
 </body>

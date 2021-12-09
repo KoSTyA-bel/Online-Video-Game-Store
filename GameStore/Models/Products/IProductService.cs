@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace GameStore.Models
 {
@@ -16,5 +17,7 @@ namespace GameStore.Models
         bool TryShowProduct(int id, out Product product);
 
         bool UpdateProduct(Product product);
+
+        Task<Product> GetLastProduct();
     }
 }

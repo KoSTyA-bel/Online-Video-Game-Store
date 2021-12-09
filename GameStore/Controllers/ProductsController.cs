@@ -64,19 +64,20 @@ namespace GameStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Models.ProductModel model)
         {
-            var product = new Product() { Name = model.Name };
-
             if (model.Picture is null)
             {
                 ModelState.AddModelError("", "Не выбрана картинка продукта.");
+                return View();
             }
             else if (model.Picture.ContentType != "image/jpeg")
             {
-                ModelState.AddModelError("", "Выбран некорректный тип данных.");
+                ModelState.AddModelError("", "Выбран файл запрещённого разрешения.");
+                return View();
             }
             else if (model.Picture.Length > BYTES_OF_10_MB)
             {
                 ModelState.AddModelError("", "Файл весит слишком много.");
+                return View();
             }
             else
             {
@@ -95,26 +96,51 @@ namespace GameStore.Controllers
                 }
             }
 
-            return Redirect($"/Product/{_service.GetAllProducts().Last().Id}");
+            var product = await _service.GetLastProduct();
+
+            return Redirect($"/Products?id={product.Id}");
         }
 
         [HttpGet]
         [Authorize(Roles = "admin")]
-        [Route("Update/{id}")]
-        public ActionResult Update(int id)
+        public IActionResult Update(int id)
         {
             _service.TryShowProduct(id, out Product product);
+
+            if (product is null)
+            {
+                return NotFound();
+            }
+
             return View(product);
         }
 
         [HttpPost]
         [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(Product model)
+        public IActionResult Update(Product model)
         {
             _service.UpdateProduct(model);
 
-            return Redirect($"/Product/{_service.GetAllProducts().Last().Id}");
+            return Index(model.Id);
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = "admin")]
+        public IActionResult Delete(int id)
+        {
+            if (!_service.TryShowProduct(id, out Product product))
+            {
+                return NotFound();
+            }
+
+            if (_service.RemoveProduct(product))
+            {
+                
+                return RedirectToAction("Index");
+            }
+
+            return Redirect($"/Product?id={id}");
         }
     }
-}d
+}

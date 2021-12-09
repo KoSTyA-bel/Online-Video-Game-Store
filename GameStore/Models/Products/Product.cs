@@ -8,6 +8,13 @@ namespace GameStore.Models
 {
     public class Product: IEquatable<Product>
     {
+        public Product()
+        {
+            Name = string.Empty;
+            Description = string.Empty;
+            PathToPicture = string.Empty;
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -22,7 +29,9 @@ namespace GameStore.Models
         public override int GetHashCode()
         {
             var res = this.Id;
-            res &= Name.Length;
+            res <<= 5;
+            res ^= Name.Length;
+            res <<= 7;
             return res ^= Description.Length;
         }
 

@@ -22,8 +22,8 @@ namespace GameStore.Models.Users
         {
             modelBuilder.Entity<Role>().HasKey(u => u.Id);
             modelBuilder.Entity<User>().HasKey(u => u.Id);
-            
-            var admin = new Role() { Id = 1, Name = "admin"};
+
+            var admin = new Role() { Id = 1, Name = "admin" };
             var user = new Role() { Id = 2, Name = "user" };
 
             modelBuilder.Entity<Role>().HasData(new Role[] { admin, user });

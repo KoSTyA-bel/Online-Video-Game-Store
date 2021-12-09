@@ -100,5 +100,7 @@ namespace GameStore.Models
 
             return _context.SaveChanges() == 1;
         }
+
+        public Task<Product> GetLastProduct() => _context.Products.OrderBy(x => x.Id).LastAsync();
     }
 }

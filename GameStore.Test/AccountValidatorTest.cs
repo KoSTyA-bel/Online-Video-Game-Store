@@ -31,6 +31,26 @@ namespace GameStore.Test
         {
             Assert.AreEqual(true, this.validator.VerifyPassword(password));
         }
+
+
+        [Test]
+        public void PasswordLengthVerifyTest()
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < 1000; i++)
+            {
+                if (i >= 6 && i <= 20)
+                {
+                    Assert.IsTrue(validator.VerifyPassword(sb.ToString()));
+                }
+                else
+                {
+                    Assert.IsFalse(validator.VerifyPassword(sb.ToString()));
+                }
+
+                sb.Append('A');
+            }
+        }
         #endregion
 
         #region LoginVerify
@@ -54,6 +74,25 @@ namespace GameStore.Test
         public void LoginVerifyTrueTest(string login)
         {
             Assert.AreEqual(true, this.validator.VerifyLogin(login));
+        }
+
+        [Test]
+        public void LoginLengthVerifyTest()
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < 1000; i++)
+            {
+                if (i >= 4 && i <= 20)
+                {
+                    Assert.IsTrue(validator.VerifyLogin(sb.ToString()));
+                }
+                else
+                {
+                    Assert.IsFalse(validator.VerifyLogin(sb.ToString()));
+                }
+
+                sb.Append('A');
+            }
         }
         #endregion
     }

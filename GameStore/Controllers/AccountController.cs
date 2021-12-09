@@ -61,11 +61,6 @@ namespace GameStore.Controllers
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
                 }
             }
-            else
-            {
-                int i = ModelState.ErrorCount;
-                i++;
-            }
 
             return View(model);
         }

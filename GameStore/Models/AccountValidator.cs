@@ -28,7 +28,7 @@ namespace GameStore
                 throw new ArgumentNullException(nameof(login));
             }
 
-            Regex reg = new Regex("[A-Za-z0-9_]{4,20}");
+            Regex reg = new Regex("[A-Za-z0-9_]{4,20}", RegexOptions.Compiled);
             Match match = reg.Match(login);
 
             return match.Success && login.Length <= 20;
@@ -48,7 +48,7 @@ namespace GameStore
                 throw new ArgumentNullException(nameof(password));
             }
 
-            Regex reg = new Regex(".{6,20}");
+            Regex reg = new Regex(".{6,20}", RegexOptions.Compiled);
             Match match = reg.Match(password);
             return match.Success && password.Length <= 20;
         }

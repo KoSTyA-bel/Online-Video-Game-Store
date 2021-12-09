@@ -12,11 +12,53 @@ namespace GameStore.Models.Cart
             CartLines = new();
         }
 
-        public Cart(List<CartLine> cartLines)
+        public Cart(IEnumerable<CartLine> cartlines)
         {
-            CartLines = cartLines ?? throw new ArgumentNullException(nameof(cartLines));
+            CartLines = cartlines.ToList() ?? throw new ArgumentNullException(nameof(cartlines));
         }
 
         public List<CartLine> CartLines { get; set; }
+
+        public bool AddProductToCart(Product product)
+        {
+            if (product is null)
+            {
+                return false;
+            }
+
+            var cartline = this.CartLines.Where(x => x.Product.Equals(product)).FirstOrDefault();
+
+            if (cartline is null)
+            {
+                this.CartLines.Add(new CartLine() { Product = product, Quantity = 1 });
+            }
+            else
+            {
+                this.CartLines.Remove(cartline);
+
+                cartline.Quantity++;
+                this.CartLines.Add(cartline);
+            }
+
+            return true;
+        }
+
+        public bool RemoveProductFromCart(Product product)
+        {
+            if (product is null)
+            {
+                return false;
+            }
+
+            var cartline = this.CartLines.Where(x => x.Product.Equals(product)).FirstOrDefault();
+
+            if (cartline != null)
+            {
+                this.CartLines.Remove(cartline);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -1,0 +1,61 @@
+﻿div {
+    display: block;
+}
+
+p {
+    line-height: 3px;
+}
+
+.name {
+    display: block;
+    width: 50%;
+    margin: 0;
+}
+
+.description {
+    padding: 10px;
+    display: block;
+    width: 400px;
+    height: 250px;
+    box-sizing: border-box;
+}
+
+.productPicture {
+    display: block;
+    margin: auto;
+    width: 300px;
+    border: 2px solid;
+    border-radius: 20px;
+    border-color: darkslategray;
+}
+
+.search-result {
+    display: flex;
+    width: auto;
+    margin: 10px 15px;
+    padding: 2px 3px;
+    border: solid 3px;
+    border-radius: 10px;
+    border-color: darkslategray;
+    background-color: #F8F8F8;
+}
+
+.search-result:hover {
+    background-color: darkgray;
+}
+
+.picture {
+    width: 100px;
+    height: 100px;
+    padding: 0px 5px 0px 0px;
+    border-radius: 10px;
+}
+
+#results a:active {
+    color: lightcyan;
+}
+
+#results div a{
+    text-decoration: none;
+    color: black;
+}
