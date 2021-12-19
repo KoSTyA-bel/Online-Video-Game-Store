@@ -44,6 +44,16 @@ namespace GameStore.Controllers
         }
 
         [HttpPost]
+        public IActionResult Buy()
+        {
+            var cart = new Cart();
+
+            HttpContext.Session.Set<Cart>("Cart", cart);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
         public IActionResult RemoveProductFromCart(int id)
         {
             var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
@@ -55,7 +65,7 @@ namespace GameStore.Controllers
 
             HttpContext.Session.Set<Cart>("Cart", cart);
 
-            return NotFound();
+            return RedirectToAction("Index");
         }
     }
 }

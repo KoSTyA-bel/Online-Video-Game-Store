@@ -7,16 +7,24 @@ using System.Threading.Tasks;
 
 namespace GameStore.Models
 {
+    /// <summary>
+    /// A service for working with products that implements the interface <see cref="IProductService"/>.
+    /// </summary>
     public class ProductService : IProductService
     {
         private ProductContext _context;
         private DbContextOptions options;
 
+        /// <summary>
+        /// Creates a new instance of the class <see cref="ProductService"/>.
+        /// </summary>
+        /// <param name="context">Database context.</param>
         public ProductService(ProductContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <inheritdoc/>
         public bool AddProduct(Product product)
         {
             if (product is null)
@@ -36,8 +44,10 @@ namespace GameStore.Models
             return true;
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Product> GetAllProducts() => _context.Products;
 
+        /// <inheritdoc/>
         public bool RemoveProduct(Product product)
         {
             if (_context.Products.Contains(product))
@@ -51,6 +61,7 @@ namespace GameStore.Models
             return false;
         }
 
+        /// <inheritdoc/>
         public bool UpdateProduct(Product product)
         {
             if (product is null)
@@ -74,6 +85,7 @@ namespace GameStore.Models
             return _context.SaveChanges() == 1;
         }
 
+        /// <inheritdoc/>
         public bool TryShowProduct(int id, out Product product)
         {
             product = _context.Products.Where(x => x.Id == id).FirstOrDefault();
@@ -81,6 +93,7 @@ namespace GameStore.Models
             return !(product is null);
         }
 
+        /// <inheritdoc/>
         public bool CreateProduct(string name, string description, decimal price, string pathToPicture)
         {
             if (_context.Products.Where(p => p.Name == name).Count() != 0)
@@ -101,6 +114,7 @@ namespace GameStore.Models
             return _context.SaveChanges() == 1;
         }
 
+        /// <inheritdoc/>
         public Task<Product> GetLastProduct() => _context.Products.OrderBy(x => x.Id).LastAsync();
     }
 }

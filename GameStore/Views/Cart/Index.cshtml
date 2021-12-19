@@ -2,21 +2,30 @@
 
 <div>
     @if (Model.CartLines.Count == 0)
-            {
+    {
                 <div>Корзина пуста</div>
-            }
-    @foreach (var element in Model.CartLines)
-            {
-                <div>
-                    <div><img src="@element.Product.PathToPicture" width="100" height="100" /></div>
-                    <div>Наименованине продукта: @element.Product.Name</div>
-                    <div>Количество: @element.Quantity</div>
-                    <div>Стоимость за еденицу товара: @element.Product.Price</div>
-                    <div>Итоговая стоимость: @(element.Product.Price * element.Quantity)</div>
-                    <form asp-controller="Cart" asp-action="RemoveProductFromCart" >
-                        <input name="id" value="@element.Product.Id" hidden="hidden" />
-                        <input type="submit" class="btn-success" value="Убрать из корзины" />
-                    </form>
-                </div>
-            }
+    }
+    else
+    {
+        decimal totalCost = 0;
+        @foreach (var element in Model.CartLines)
+        {
+                    <div>
+                        <div><img src="@element.Product.PathToPicture" width="100" height="100" /></div>
+                        <div>Наименованине продукта: @element.Product.Name</div>
+                        <div>Количество: @element.Quantity</div>
+                        <div>Стоимость за еденицу товара: @element.Product.Price</div>
+                        <div>Итоговая стоимость: @(element.Product.Price * element.Quantity)</div>
+                        <form asp-controller="Cart" asp-action="RemoveProductFromCart" >
+                            <input name="id" value="@element.Product.Id" hidden="hidden" />
+                            <input type="submit" class="btn-success" value="Убрать из корзины" />
+                        </form>
+                    </div>
+                    totalCost += element.Product.Price * element.Quantity;
+        }
+        <div><p>Полная стоимость всех товаров: @totalCost</p></div>
+        <form asp-action="Buy">
+            <input type="submit" value="Купить" />
+        </form>
+    }
 </div>

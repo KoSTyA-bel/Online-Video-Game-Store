@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using GameStore.Models.Users;
 using GameStore.Models;
+using Microsoft.Extensions.Logging;
+using System.Configuration;
 
 namespace GameStore
 {
@@ -30,20 +32,19 @@ namespace GameStore
         {
             services.AddControllersWithViews();
 
-            // Запускаем в работу базу данных пользователей.
-            services.AddDbContext<UserContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=UsersData;Trusted_Connection=True;"));
+            // Databases.
+            services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Users")));
+            services.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Products")));
 
-            services.AddDbContext<ProductContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Products;Trusted_Connection=True;"));
-
-            // Добавляем сервис для работы с пользователями.
+            // All for user servises.
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ILogger>(config => LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("App logger"));
 
             services.AddTransient<AccountValidator>();
 
             services.AddSession();
 
-            // Установка конфигурации подключения.
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options => //CookieAuthenticationOptions
             {
@@ -51,8 +52,10 @@ namespace GameStore
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)
         {
+            logger.LogInformation("App starting");
+
             app.UseDeveloperExceptionPage();
 
             app.UseStaticFiles();
@@ -71,6 +74,8 @@ namespace GameStore
                     name: "default",
                     pattern: "{controller=Products}/{action=Index}");
             });
+
+            logger.LogInformation($"App starterd");
         }
     }
 }

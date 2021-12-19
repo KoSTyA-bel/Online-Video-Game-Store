@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace GameStore.Models
 {
+    /// <summary>
+    /// Class-container of product information.
+    /// </summary>
     public class Product: IEquatable<Product>
     {
+        /// <summary>
+        /// Crate a new instanse of <see cref="Product"/>.
+        /// </summary>
         public Product()
         {
             Name = string.Empty;
@@ -18,13 +24,29 @@ namespace GameStore.Models
         [Key]
         public int Id { get; set; }
 
+        /// <summary>
+        /// Product name.
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Product description.
+        /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Product price.
+        /// </summary>
         public decimal Price { get; set; }
 
+        /// <summary>
+        /// Path to product picture.
+        /// </summary>
         public string PathToPicture { get; set; }
+
+        public static bool operator ==(Product left, Product right) => left != null ? left.Equals(right) : right == null;
+
+        public static bool operator !=(Product left, Product right) => !(left == right);
 
         public override int GetHashCode()
         {
@@ -60,6 +82,11 @@ namespace GameStore.Models
             }
 
             return other.Id == this.Id && string.Equals(other.Description, this.Description) && string.Equals(other.Name, this.Name) && other.Price == this.Price && string.Equals(other.PathToPicture, this.PathToPicture);
+        }
+
+        public override string ToString() 
+        {
+            return $"Product {Id}\n{Name}\n{Description}\n{Price}\n{PathToPicture}";
         }
     }
 }
