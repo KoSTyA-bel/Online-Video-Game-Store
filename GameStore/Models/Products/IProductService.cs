@@ -55,6 +55,6 @@ namespace GameStore.Models
         /// Retrieves information about the latest product in the database.
         /// </summary>
         /// <returns>Product.</returns>
-        Task<Product> GetLastProduct();
+        Product GetLastProduct();
     }
 }

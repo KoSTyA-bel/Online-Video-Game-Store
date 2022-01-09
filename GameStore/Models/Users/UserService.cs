@@ -12,58 +12,61 @@ namespace GameStore.Models.Users
     /// </summary>
     public class UserService : IUserService
     {
-        private UserContext _context;
+        private IUserContext _context;
 
         /// <summary>
         /// Initializes a new class object <see cref="UserService"/>.
         /// </summary>
         /// <param name="context">Database.</param>
-        public UserService(UserContext context)
+        public UserService(IUserContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         /// <inheritdoc/>
-        public async Task RegistrUser(string login, string password)
+        public int RegistrUser(string login, string password)
         {
             var user = new User() { Login = login, Password = password};
-            var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "user");
-
-            if (userRole != null)
-            {
-                user.Role = userRole;
-
-                await _context.AddAsync(user);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        /// <inheritdoc/>
-        public async Task RegistrAdmin(string login, string password)
-        {
-            var user = new User() { Login = login, Password = password };
-            var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "admin");
+            var userRole = _context.SelectRole(2);
 
             if (userRole != null)
             {
                 user.Role = userRole;
                 user.RoleId = userRole.Id;
 
-                await _context.AddAsync(user);
-                await _context.SaveChangesAsync();
+                _context.AddUser(user);
             }
+
+            return -1;
         }
 
         /// <inheritdoc/>
-        public Task<User> GetUser(string login) => _context.Users.FirstOrDefaultAsync(user => user.Login == login);
+        public int RegistrAdmin(string login, string password)
+        {
+            var user = new User() { Login = login, Password = password };
+            var userRole = _context.SelectRole(1);
+
+            if (userRole != null)
+            {
+                user.Role = userRole;
+                user.RoleId = userRole.Id;
+
+                return _context.AddUser(user);
+            }
+
+            return -1;
+        }
 
         /// <inheritdoc/>
-        public Task<User> GetUser(string login, string password) => _context.Users.FirstOrDefaultAsync(user => user.Login == login && user.Password == password);
+        public User GetUser(int id) => _context.SelectUser(id);
 
         /// <inheritdoc/>
-        public Task<bool> ContainsUser(string login) => _context.Users.Select(x => x.Login).ContainsAsync(login);
+        public User GetUser(string login) => _context.SelectUser(login);
 
         /// <inheritdoc/>
-        public ValueTask<Role> TryGetRole(int? id) => _context.Roles.FindAsync(id);   
+        public bool ContainsUser(string login) => _context.SelectUser(login) != null;
+
+        /// <inheritdoc/>
+        public Role TryGetRole(int? id) => _context.SelectRole(id.Value);   
     }
 }

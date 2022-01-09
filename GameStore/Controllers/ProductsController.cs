@@ -96,7 +96,7 @@ namespace GameStore.Controllers
                 }
             }
 
-            var product = await _service.GetLastProduct();
+            var product =  _service.GetLastProduct();
 
             return Redirect($"/Products?id={product.Id}");
         }

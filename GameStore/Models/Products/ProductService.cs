@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GameStore.Models.Products;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,14 +13,13 @@ namespace GameStore.Models
     /// </summary>
     public class ProductService : IProductService
     {
-        private ProductContext _context;
-        private DbContextOptions options;
+        private IProductContext _context;
 
         /// <summary>
         /// Creates a new instance of the class <see cref="ProductService"/>.
         /// </summary>
         /// <param name="context">Database context.</param>
-        public ProductService(ProductContext context)
+        public ProductService(IProductContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -32,33 +32,25 @@ namespace GameStore.Models
                 throw new ArgumentNullException(nameof(product));
             }
 
-            if (_context.Products.Contains(product))
-            {
-                return false;
-            }
-
-            _context.Add(product);
-
-            _context.SaveChanges();
+            _context.AddProduct(product);
 
             return true;
         }
 
         /// <inheritdoc/>
-        public IEnumerable<Product> GetAllProducts() => _context.Products;
+        public IEnumerable<Product> GetAllProducts() => _context.GetAllProducts();
 
         /// <inheritdoc/>
         public bool RemoveProduct(Product product)
         {
-            if (_context.Products.Contains(product))
+            if (product is null)
             {
-                _context.Remove(product);
-                _context.SaveChanges();
-
-                return true;
+                throw new ArgumentNullException(nameof(product));
             }
 
-            return false;
+            _context.DeleteProduct(product.Id);
+
+            return true;
         }
 
         /// <inheritdoc/>
@@ -66,29 +58,19 @@ namespace GameStore.Models
         {
             if (product is null)
             {
-                //throw new ArgumentNullException(nameof(product));
-                return false;
+                throw new ArgumentNullException(nameof(product));
+                //return false;
             }
 
-            var productToUpdate = _context.Products.Where(x => x.Id == product.Id).FirstOrDefault();
+            _context.UpdateProduct(product);
 
-            if (productToUpdate is null)
-            {
-                //throw new ArgumentNullException(nameof(product));
-                return false;
-            }
-
-            productToUpdate.Name = product.Name;
-            productToUpdate.Description = product.Description;
-            productToUpdate.Price = product.Price;
-
-            return _context.SaveChanges() == 1;
+            return true;
         }
 
         /// <inheritdoc/>
         public bool TryShowProduct(int id, out Product product)
         {
-            product = _context.Products.Where(x => x.Id == id).FirstOrDefault();
+            product = _context.SelectProduct(id);
 
             return !(product is null);
         }
@@ -96,9 +78,19 @@ namespace GameStore.Models
         /// <inheritdoc/>
         public bool CreateProduct(string name, string description, decimal price, string pathToPicture)
         {
-            if (_context.Products.Where(p => p.Name == name).Count() != 0)
+            if (name is null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (description is null)
+            {
+                throw new ArgumentNullException(nameof(description));
+            }
+
+            if (pathToPicture is null)
+            {
+                throw new ArgumentNullException(nameof(pathToPicture));
             }
 
             var product = new Product()
@@ -109,12 +101,12 @@ namespace GameStore.Models
                 PathToPicture = pathToPicture,
             };
 
-            _context.Products.Add(product);
+            _context.AddProduct(product);
 
-            return _context.SaveChanges() == 1;
+            return true;
         }
 
         /// <inheritdoc/>
-        public Task<Product> GetLastProduct() => _context.Products.OrderBy(x => x.Id).LastAsync();
+        public Product GetLastProduct() => _context.GetAllProducts().LastOrDefault();
     }
 }

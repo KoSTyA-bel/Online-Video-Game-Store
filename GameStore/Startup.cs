@@ -15,6 +15,7 @@ using GameStore.Models.Users;
 using GameStore.Models;
 using Microsoft.Extensions.Logging;
 using System.Configuration;
+using GameStore.Models.Products;
 
 namespace GameStore
 {
@@ -33,13 +34,21 @@ namespace GameStore
             services.AddControllersWithViews();
 
             // Databases.
-            services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Users")));
-            services.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Products")));
+            //services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Users")));
+            //services.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Products")));
+            services.AddScoped<IProductContext, ProductContextADO>(provider =>
+            {
+                return new ProductContextADO(Configuration.GetConnectionString("Products"));
+            });
+            services.AddScoped<IUserContext, UserContextADO>(provider => {
+                return new UserContextADO(Configuration.GetConnectionString("Users"));
+            });
+            //services.AddTransient<IUserContext, UserContext>();
 
             // All for user servises.
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<ILogger>(config => LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("App logger"));
+            services.AddTransient(provider => LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("App logger"));
 
             services.AddTransient<AccountValidator>();
 

@@ -53,12 +53,18 @@ namespace GameStore.Controllers
                 else
                 {
                     _logger?.LogInformation($"Try fing user with login {model.Login}");
-                    User user = await _userService.GetUser(model.Login, model.Password);
+                    User user = _userService.GetUser(model.Login);
 
                     if (user != null)
                     {
+                        if (!string.Equals(model.Password, user.Password))
+                        {
+                            ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                            return View(model);
+                        };
+
                         _logger?.LogInformation($"User with login {user.Login} succesfuly finded");
-                        user.Role = await _userService.TryGetRole(user.RoleId);
+                        user.Role =  _userService.TryGetRole(user.RoleId);
                         await Authenticate(user); // аутентификация
 
                         if (string.IsNullOrEmpty(returnUrl))
@@ -100,10 +106,10 @@ namespace GameStore.Controllers
                 else
                 {
                     _logger?.LogInformation($"Try to find user with login {model.Login}");
-                    if (!await _userService.ContainsUser(model.Login))
+                    if (!_userService.ContainsUser(model.Login))
                     {
                         _logger?.LogInformation($"Create new user with login {model.Login}");
-                        await _userService.RegistrUser(model.Login, model.Password);
+                        _userService.RegistrUser(model.Login, model.Password);
 
                         _logger?.LogInformation($"The user with the login {model.Login} was created successfully. Redirect to login page");
 
