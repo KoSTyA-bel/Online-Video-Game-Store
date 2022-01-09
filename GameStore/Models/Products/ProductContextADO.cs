@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace GameStore.Models.Products
 {
+    /// <summary>
+    /// Work with DB by ADO.Net.
+    /// </summary>
     public class ProductContextADO : IProductContext
     {
         private readonly string _connectionString;
@@ -15,11 +18,16 @@ namespace GameStore.Models.Products
         private readonly string _deleteProduct = "DELETE FROM Products WHERE Id = @Id";
         private readonly string _countOfProducts = "SELECT COUNT(ID) FROM Products";
 
+        /// <summary>
+        /// Crate a new instance of <see cref="ProductContextADO"/>.
+        /// </summary>
+        /// <param name="connectionString">DB connection string.</param>
         public ProductContextADO(string connectionString)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
         }
 
+        /// <inheritdoc/>
         public int AddProduct(Product product)
         {
             if (product is null)
@@ -54,6 +62,7 @@ namespace GameStore.Models.Products
             }
         }
 
+        /// <inheritdoc/>
         public void UpdateProduct(Product product)
         {
             if (product is null)
@@ -86,6 +95,7 @@ namespace GameStore.Models.Products
             }
         }
 
+        /// <inheritdoc/>
         public void DeleteProduct(int id)
         {
             var connection = new SqlConnection(_connectionString);
@@ -105,6 +115,7 @@ namespace GameStore.Models.Products
             }
         }
 
+        /// <inheritdoc/>
         public Product SelectProduct(int id)
         {
             var connection = new SqlConnection(_connectionString);
@@ -144,6 +155,7 @@ namespace GameStore.Models.Products
             }
         }
 
+        /// <inheritdoc/>
         public int GetCountOfProducts()
         {
             var connection = new SqlConnection(_connectionString);
@@ -164,6 +176,7 @@ namespace GameStore.Models.Products
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Product> GetAllProducts()
         {
             var connection = new SqlConnection(_connectionString);

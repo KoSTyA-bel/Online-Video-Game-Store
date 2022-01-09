@@ -7,8 +7,15 @@ using System.Threading.Tasks;
 
 namespace GameStore.Models.Users
 {
+    /// <summary>
+    /// Work with DB by EntityFrameworkCore.
+    /// </summary>
     public sealed class UserContext : DbContext, IUserContext
     {
+        /// <summary>
+        /// Create a new instanse of <see cref="UserContext"/>.
+        /// </summary>
+        /// <param name="options">Options for creating context.</param>
         public UserContext(DbContextOptions<UserContext> options)
             : base(options)
         {
@@ -18,6 +25,7 @@ namespace GameStore.Models.Users
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
 
+        /// <inheritdoc/>
         public int AddUser(User user)
         {
             if (user is null)
@@ -30,6 +38,7 @@ namespace GameStore.Models.Users
             return user.Id;
         }
 
+        /// <inheritdoc/>
         public void DeleteUser(int id)
         {
             var user = SelectUser(id);
@@ -41,14 +50,19 @@ namespace GameStore.Models.Users
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<User> GetAllUsers() => this.Users;
 
+        /// <inheritdoc/>
         public int GetCountOfUsers() => this.Users.Count();
 
+        /// <inheritdoc/>
         public Role SelectRole(int id) => this.Roles.Where(role => role.Id == id).FirstOrDefault();
 
+        /// <inheritdoc/>
         public User SelectUser(int id) => this.Users.Where(user => user.Id == id).FirstOrDefault();
 
+        /// <inheritdoc/>
         public User SelectUser(string login)
         {
             if (login is null)
@@ -59,6 +73,7 @@ namespace GameStore.Models.Users
             return this.Users.Where(user => login == user.Login).FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public void UpdateUser(User user)
         {
             if (user is null)
