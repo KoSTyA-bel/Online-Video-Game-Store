@@ -1,11 +1,9 @@
-﻿using GameStore.Models.Products;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-namespace GameStore.Models
+namespace GameStore.Services.Products
 {
     /// <summary>
     /// Work with DB by EntityFrameworkCore.
@@ -16,7 +14,7 @@ namespace GameStore.Models
         /// Create a new instance of <see cref="ProductContext"/>.
         /// </summary>
         /// <param name="options">Options for creating context.</param>
-        public ProductContext(DbContextOptions<ProductContext> options)
+        public ProductContext(DbContextOptions options)
             : base(options)
         {
             Database.EnsureCreated();
@@ -70,6 +68,8 @@ namespace GameStore.Models
             }
 
             this.Products.Update(product);
+
+            this.SaveChanges();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

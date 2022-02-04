@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
-namespace GameStore.Models
+namespace GameStore.Services.Products
 {
     public interface IProductService
     {

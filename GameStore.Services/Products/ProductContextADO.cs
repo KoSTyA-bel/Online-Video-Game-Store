@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 
-namespace GameStore.Models.Products
+namespace GameStore.Services.Products
 {
     /// <summary>
     /// Work with DB by ADO.Net.
@@ -28,7 +28,7 @@ namespace GameStore.Models.Products
         }
 
         /// <inheritdoc/>
-        public int AddProduct(Product product)
+        public virtual int AddProduct(Product product)
         {
             if (product is null)
             {
@@ -63,7 +63,7 @@ namespace GameStore.Models.Products
         }
 
         /// <inheritdoc/>
-        public void UpdateProduct(Product product)
+        public virtual void UpdateProduct(Product product)
         {
             if (product is null)
             {
@@ -96,7 +96,7 @@ namespace GameStore.Models.Products
         }
 
         /// <inheritdoc/>
-        public void DeleteProduct(int id)
+        public virtual void DeleteProduct(int id)
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()
@@ -116,7 +116,7 @@ namespace GameStore.Models.Products
         }
 
         /// <inheritdoc/>
-        public Product SelectProduct(int id)
+        public virtual Product SelectProduct(int id)
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()
@@ -156,7 +156,7 @@ namespace GameStore.Models.Products
         }
 
         /// <inheritdoc/>
-        public int GetCountOfProducts()
+        public virtual int GetCountOfProducts()
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()
@@ -177,7 +177,7 @@ namespace GameStore.Models.Products
         }
 
         /// <inheritdoc/>
-        public IEnumerable<Product> GetAllProducts()
+        public virtual IEnumerable<Product> GetAllProducts()
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()

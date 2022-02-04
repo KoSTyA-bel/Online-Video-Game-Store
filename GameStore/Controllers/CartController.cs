@@ -1,21 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using GameStore.Models;
-using System.Text.Json;
 using GameStore.Models.Cart;
+using GameStore.Services.Products;
 
 namespace GameStore.Controllers
 {
     [Authorize]
     public class CartController : Controller
     {
-        private IProductService _productService;
+        private readonly IProductService _productService;
 
         public CartController(IProductService productService)
         {

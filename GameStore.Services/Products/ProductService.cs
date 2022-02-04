@@ -1,12 +1,8 @@
-﻿using GameStore.Models.Products;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace GameStore.Models
+namespace GameStore.Services.Products
 {
     /// <summary>
     /// A service for working with products that implements the interface <see cref="IProductService"/>.

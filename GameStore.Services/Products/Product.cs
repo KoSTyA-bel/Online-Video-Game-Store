@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace GameStore.Models
+namespace GameStore.Services.Products
 {
     /// <summary>
     /// Class-container of product information.
@@ -21,7 +18,23 @@ namespace GameStore.Models
             PathToPicture = string.Empty;
         }
 
-        [Key]
+        /// <summary>
+        /// Deconstructs an object.
+        /// </summary>
+        public void Deconstruct(out int id, out string name, out string desctipriptin, out decimal price, out string pathToPicture)
+        {
+            id = this.Id;
+            name = this.Name;
+            desctipriptin = this.Description;
+            price = this.Price;
+            pathToPicture = this.PathToPicture;
+        }
+
+        /// <summary>
+        /// Deconstructs an object.
+        /// </summary>
+        public (int id, string name, string description, decimal price, string pathToPicture) Deconstruct() => (this.Id, this.Name, this.Description, this.Price, this.PathToPicture);
+
         public int Id { get; set; }
 
         /// <summary>

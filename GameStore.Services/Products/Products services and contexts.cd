@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GameStore.Services.Products.ProductContext">
+    <Position X="1.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAIAAAQAiAEAAAAAAAAAAAAIAAAAQ=</HashCode>
+      <FileName>Products\ProductContext.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GameStore.Services.Products.ProductContextADO">
+    <Position X="3.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ADAEIAQQAAAAAAAAIAAAQAiAAAAAAAgIAAAAAIAAAAA=</HashCode>
+      <FileName>Products\ProductContextADO.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GameStore.Services.Products.ProductContextADOThreading">
+    <Position X="3.75" Y="5.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAIAAAIAAAQAiAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Products\ProductContextADOThreading.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GameStore.Services.Products.ProductContextAsync">
+    <Position X="1" Y="5.25" Width="2" />
+    <InheritanceLine Type="GameStore.Services.Products.ProductContext" FixedToPoint="true">
+      <Path>
+        <Point X="2.125" Y="3.531" />
+        <Point X="2.125" Y="5.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAIIAAAAAAAAEAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Products\ProductContextAsync.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GameStore.Services.Products.ProductService">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAABAAIIAAYQACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Products\ProductService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GameStore.Services.Products.ProductServiceAsync">
+    <Position X="6.25" Y="5.25" Width="2" />
+    <InheritanceLine Type="GameStore.Services.Products.ProductService" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.062" Y="3.401" />
+        <Point X="7.062" Y="4.451" />
+        <Point X="7.333" Y="4.451" />
+        <Point X="7.333" Y="5.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAEBAAAAAkAAAACQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Products\ProductServiceAsync.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GameStore.Services.Products.ProductServiceBuilder">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Products\ProductServiceBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameStore.Services.Products.ConcreateProductServiceBuilder">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Products\ConcreateProductServiceBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="GameStore.Services.Products.IProductService">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAIIAAYQACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Products\IProductService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GameStore.Services.Products.IProductServiceAsync">
+    <Position X="11.25" Y="4" Width="2" />
+    <InheritanceLine Type="GameStore.Services.Products.IProductService" FixedToPoint="true">
+      <Path>
+        <Point X="12.25" Y="2.757" />
+        <Point X="12.25" Y="4" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAEAAAAAAkAAAACQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Products\IProductServiceAsync.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GameStore.Services.Products.IProductContext">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAIAAAQAiAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Products\IProductContext.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GameStore.Services.Products.IProductContextAsync">
+    <Position X="8.75" Y="3.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAIIAAAAAAAAEAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Products\IProductContextAsync.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

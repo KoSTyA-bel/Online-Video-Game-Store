@@ -1,21 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GameStore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using GameStore.Models.Users;
-using GameStore.Models;
+using GameStore.Services.Users;
 using Microsoft.Extensions.Logging;
-using System.Configuration;
-using GameStore.Models.Products;
+using GameStore.Services.Products;
 
 namespace GameStore
 {
@@ -34,20 +25,14 @@ namespace GameStore
             services.AddControllersWithViews();
 
             // Databases.
-            //services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Users")));
-            //services.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Products")));
-            services.AddScoped<IProductContext, ProductContextADO>(provider =>
-            {
-                return new ProductContextADO(Configuration.GetConnectionString("Products"));
-            });
-            services.AddScoped<IUserContext, UserContextADO>(provider => {
-                return new UserContextADO(Configuration.GetConnectionString("Users"));
-            });
-            //services.AddTransient<IUserContext, UserContext>();
+            services.AddDbContext<IUserContext, UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Users")));
+            services.AddDbContext<ProductContextAsync>(options => options.UseSqlServer(Configuration.GetConnectionString("Products")));
 
             // All for user servises.
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IProductContextAsync, ProductContextAsync>();
+            services.AddTransient<IProductServiceAsync, ProductServiceAsync>();
+            services.AddTransient<IProductService>(porovider => (IProductService)porovider.GetService(typeof(IProductServiceAsync)));
             services.AddTransient(provider => LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("App logger"));
 
             services.AddTransient<AccountValidator>();

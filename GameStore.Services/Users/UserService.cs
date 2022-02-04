@@ -1,11 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 
-namespace GameStore.Models.Users
+namespace GameStore.Services.Users
 {
     /// <summary>
     /// A specific user service that implements the interface <see cref="IUserService"/>.
@@ -26,7 +23,7 @@ namespace GameStore.Models.Users
         /// <inheritdoc/>
         public int RegistrUser(string login, string password)
         {
-            var user = new User() { Login = login, Password = password};
+            var user = new User(login, password);
             var userRole = _context.SelectRole(2);
 
             if (userRole != null)
@@ -43,7 +40,7 @@ namespace GameStore.Models.Users
         /// <inheritdoc/>
         public int RegistrAdmin(string login, string password)
         {
-            var user = new User() { Login = login, Password = password };
+            var user = new User(login, password);
             var userRole = _context.SelectRole(1);
 
             if (userRole != null)
@@ -67,6 +64,6 @@ namespace GameStore.Models.Users
         public bool ContainsUser(string login) => _context.SelectUser(login) != null;
 
         /// <inheritdoc/>
-        public Role TryGetRole(int? id) => _context.SelectRole(id.Value);   
+        public Role TryGetRole(int? id) => _context.SelectRole(id.Value);
     }
 }

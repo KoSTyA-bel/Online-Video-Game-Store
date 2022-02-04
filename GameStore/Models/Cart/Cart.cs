@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
+using GameStore.Services.Products;
 
 namespace GameStore.Models.Cart
 {
-    public class Cart
+    [Serializable]
+    public class Cart : ISerializable
     {
         /// <summary>
         /// Crate a new instanse of <see cref="Cart"/>.
@@ -56,6 +58,12 @@ namespace GameStore.Models.Cart
             }
 
             return true;
+        }
+
+        /// <inheritdoc/>
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("CartLines", CartLines, typeof(List<CartLine>));
         }
 
         /// <summary>

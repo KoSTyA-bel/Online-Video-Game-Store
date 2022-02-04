@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace GameStore.Models.Users
+namespace GameStore.Services.Users
 {
     public class UserContextADO : IUserContext
     {
@@ -14,7 +14,7 @@ namespace GameStore.Models.Users
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
         }
 
-        public int AddUser(User user)
+        public virtual int AddUser(User user)
         {
             if (user is null)
             {
@@ -29,13 +29,13 @@ namespace GameStore.Models.Users
                 CommandType = CommandType.StoredProcedure
             };
 
-            command.Parameters.Add(new SqlParameter("@Login", SqlDbType.NVarChar, 40));
+            command.Parameters.Add(new SqlParameter("@Login", SqlDbType.NVarChar));
             command.Parameters["@Login"].Value = user.Login;
-            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 40));
+            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.Binary));
             command.Parameters["@Password"].Value = user.Password;
-            command.Parameters.Add(new SqlParameter("@RoleId", SqlDbType.Int, 4));
+            command.Parameters.Add(new SqlParameter("@RoleId", SqlDbType.Int));
             command.Parameters["@RoleId"].Value = user.RoleId;
-            command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int, 4));
+            command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int));
             command.Parameters["@Id"].Direction = ParameterDirection.Output;
 
             using (connection)
@@ -46,7 +46,7 @@ namespace GameStore.Models.Users
             }
         }
 
-        public void UpdateUser(User user)
+        public virtual void UpdateUser(User user)
         {
             if (user is null)
             {
@@ -61,13 +61,13 @@ namespace GameStore.Models.Users
                 CommandType = CommandType.StoredProcedure
             };
 
-            command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int, 4));
+            command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int));
             command.Parameters["@Id"].Value = user.Id;
-            command.Parameters.Add(new SqlParameter("@Login", SqlDbType.NVarChar, 40));
+            command.Parameters.Add(new SqlParameter("@Login", SqlDbType.NVarChar));
             command.Parameters["@Login"].Value = user.Login;
-            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 40));
+            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.Binary));
             command.Parameters["@Password"].Value = user.Password;
-            command.Parameters.Add(new SqlParameter("@RoleId", SqlDbType.Int, 4));
+            command.Parameters.Add(new SqlParameter("@RoleId", SqlDbType.Int));
             command.Parameters["@RoleId"].Value = user.RoleId;
 
             using (connection)
@@ -77,7 +77,7 @@ namespace GameStore.Models.Users
             }
         }
 
-        public void DeleteUser(int id)
+        public virtual void DeleteUser(int id)
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()
@@ -97,7 +97,7 @@ namespace GameStore.Models.Users
             }
         }
 
-        public User SelectUser(int id)
+        public virtual User SelectUser(int id)
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()
@@ -126,7 +126,7 @@ namespace GameStore.Models.Users
                 {
                     Id = (int)reader["Id"],
                     Login = (string)reader["Login"],
-                    Password = (string)reader["Password"],
+                    Password = (byte[])reader["Password"],
                     RoleId = (int?)reader["RoleId"],
                 };
 
@@ -136,7 +136,7 @@ namespace GameStore.Models.Users
             }
         }
 
-        public User SelectUser(string login)
+        public virtual User SelectUser(string login)
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()
@@ -165,7 +165,7 @@ namespace GameStore.Models.Users
                 {
                     Id = (int)reader["Id"],
                     Login = (string)reader["Login"],
-                    Password = (string)reader["Password"],
+                    Password = (byte[])reader["Password"],
                     RoleId = (int?)reader["RoleId"],
                 };
 
@@ -175,7 +175,7 @@ namespace GameStore.Models.Users
             }
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public virtual IEnumerable<User> GetAllUsers()
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()
@@ -197,7 +197,7 @@ namespace GameStore.Models.Users
                     {
                         Id = (int)reader["Id"],
                         Login = (string)reader["Login"],
-                        Password = (string)reader["Password"],
+                        Password = (byte[])reader["Password"],
                         RoleId = (int?)reader["RoleId"],
                     });
                 }
@@ -208,7 +208,7 @@ namespace GameStore.Models.Users
             }
         }
 
-        public int GetCountOfUsers()
+        public virtual int GetCountOfUsers()
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()
@@ -233,7 +233,7 @@ namespace GameStore.Models.Users
             }
         }
 
-        public Role SelectRole(int id)
+        public virtual Role SelectRole(int id)
         {
             var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand()

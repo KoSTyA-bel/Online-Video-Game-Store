@@ -1,4 +1,4 @@
-﻿using GameStore.Models;
+﻿using GameStore.Services.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,18 +6,16 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 
 namespace GameStore.Controllers
 {
     public class ProductsController : Controller
     {
         private const long BYTES_OF_10_MB = 10485760;
-        private IProductService _service;
+        private IProductServiceAsync _service;
         private IWebHostEnvironment _appEnvironment;
 
-        public ProductsController(IWebHostEnvironment appEnvironment, IProductService service)
+        public ProductsController(IWebHostEnvironment appEnvironment, IProductServiceAsync service)
         {
             _appEnvironment = appEnvironment ?? throw new ArgumentNullException(nameof(appEnvironment));
             _service = service ?? throw new ArgumentNullException(nameof(service));

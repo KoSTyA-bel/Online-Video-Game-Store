@@ -1,23 +1,21 @@
-﻿using GameStore;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using GameStore.Models.Users;
+using GameStore.Services.Users;
 using Microsoft.Extensions.Logging;
+using GameStore.Services;
 
 namespace GameStore.Controllers
 {
     public class AccountController : Controller
     {
-        protected IUserService _userService;
-        protected AccountValidator _validator;
-        protected ILogger _logger;
+        protected readonly IUserService _userService;
+        protected readonly AccountValidator _validator;
+        protected readonly ILogger _logger;
 
         protected AccountController(IUserService userService, AccountValidator validator)
         {
@@ -43,45 +41,46 @@ namespace GameStore.Controllers
         public virtual async Task<IActionResult> Login(Models.LoginModel model, string returnUrl)
         {
             _logger?.LogInformation($"Validate data user login data: login {model.Login}, password {model.Password}");
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
-                if (!_validator.VerifyLogin(model.Login) || !_validator.VerifyPassword(model.Password))
-                {
-                    _logger?.LogInformation("Bad data");
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-                }
-                else
-                {
-                    _logger?.LogInformation($"Try fing user with login {model.Login}");
-                    User user = _userService.GetUser(model.Login);
-
-                    if (user != null)
-                    {
-                        if (!string.Equals(model.Password, user.Password))
-                        {
-                            ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-                            return View(model);
-                        };
-
-                        _logger?.LogInformation($"User with login {user.Login} succesfuly finded");
-                        user.Role =  _userService.TryGetRole(user.RoleId);
-                        await Authenticate(user); // аутентификация
-
-                        if (string.IsNullOrEmpty(returnUrl))
-                        {
-                            returnUrl = "/";
-                        }
-
-                        _logger?.LogInformation("Regirect user to home page");
-                        return Redirect(returnUrl);
-                    }
-
-                    _logger?.LogInformation($"User with login: {model.Login}, not found");
-                    ModelState.AddModelError("", "Пользователя, с введёнными вами данными, не существует");
-                }
+                return View(model);
             }
 
-            return View(model);
+            if (!_validator.VerifyLogin(model.Login) || !_validator.VerifyPassword(model.Password))
+            {
+                _logger?.LogInformation("Bad data");
+                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                return View(model);
+            }
+
+            _logger?.LogInformation($"Try fing user with login {model.Login}");
+            User user = _userService.GetUser(model.Login);
+
+            if (user == null)
+            {
+                _logger?.LogInformation($"User with login: {model.Login}, not found");
+                ModelState.AddModelError("", "Пользователя, с введёнными вами данными, не существует");
+                return View(model);
+            }
+
+            if (user.Password.Equals(model.Password.GetHash()))
+            {
+                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                return View(model);
+            }
+
+            _logger?.LogInformation($"User with login {user.Login} succesfuly finded");
+            user.Role = _userService.TryGetRole(user.RoleId);
+            await Authenticate(user);
+
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                returnUrl = "/";
+            }
+
+            _logger?.LogInformation("Regirect user to home page");
+            return Redirect(returnUrl);
         }
 
         [HttpGet]
@@ -93,35 +92,35 @@ namespace GameStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual async Task<IActionResult> Register(Models.RegisterModel model)
+        public virtual IActionResult Register(Models.RegisterModel model)
         {
             _logger?.LogInformation($"Validate data user register data: login {model.Login}, password {model.Password}");
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
-                if (!_validator.VerifyData(model.Login, model.Password, model.ConfirmPassword))
-                {
-                    _logger?.LogInformation("Bad data");
-                    ModelState.AddModelError("", "Произошла ошибка сервера.");
-                }
-                else
-                {
-                    _logger?.LogInformation($"Try to find user with login {model.Login}");
-                    if (!_userService.ContainsUser(model.Login))
-                    {
-                        _logger?.LogInformation($"Create new user with login {model.Login}");
-                        _userService.RegistrUser(model.Login, model.Password);
-
-                        _logger?.LogInformation($"The user with the login {model.Login} was created successfully. Redirect to login page");
-
-                        return RedirectToAction("Login", "Account");
-                    }
-                    else
-                    {
-                        _logger?.LogInformation($"Login {model.Login} is claimed");
-                        ModelState.AddModelError("", "Login is claimed/");
-                    }
-                }
+                return View(model);
             }
+
+            if (!_validator.VerifyData(model.Login, model.Password, model.ConfirmPassword))
+            {
+                _logger?.LogInformation("Bad data");
+                ModelState.AddModelError("", "Произошла ошибка сервера.");
+                return View(model);
+            }
+
+            _logger?.LogInformation($"Try to find user with login {model.Login}");
+
+            if (!_userService.ContainsUser(model.Login))
+            {
+                _logger?.LogInformation($"Create new user with login {model.Login}");
+                _userService.RegistrUser(model.Login, model.Password);
+                _logger?.LogInformation($"The user with the login {model.Login} was created successfully. Redirect to login page");
+
+                return RedirectToAction("Login", "Account");
+            }
+
+            _logger?.LogInformation($"Login {model.Login} is claimed");
+            ModelState.AddModelError("", "Login is claimed/");
 
             return View(model);
         }

@@ -1,4 +1,4 @@
-﻿@model GameStore.Models.Product
+﻿@model Product
 
 <link rel="stylesheet" href="~/css/Products.css" />
 
@@ -18,7 +18,7 @@
     </div>
     <div>
         <label asp-for="Price">Введите стоимость продукта</label>
-        <input type="number" asp-for="Price" value="@Model.Price"/>
+        <input type="number" asp-for="Price" step=0.01 value="@Model.Price"/>
         <span asp-validation-for="Price" />
     </div>
     <input asp-for="Id" value="@Model.Id" hidden="hidden"/>

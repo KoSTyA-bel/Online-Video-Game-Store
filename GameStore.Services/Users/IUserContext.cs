@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GameStore.Models.Users
+namespace GameStore.Services.Users
 {
     /// <summary>
     /// It represents methods that must be implemented in classes that represent working with users database.

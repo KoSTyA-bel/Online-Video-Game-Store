@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace GameStore.Models.Users
+﻿namespace GameStore.Services.Users
 {
     /// <summary>
     /// Provides a set of methods that should implement user services.

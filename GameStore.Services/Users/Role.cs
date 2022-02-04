@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace GameStore.Models.Users
+namespace GameStore.Services.Users
 {
     /// <summary>
     /// Container class that stores information about the role.
@@ -22,7 +18,6 @@ namespace GameStore.Models.Users
         /// <summary>
         /// Role Id.
         /// </summary>
-        [Key]
         public int Id { get; set; }
 
         /// <summary>

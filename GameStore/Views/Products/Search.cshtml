@@ -9,7 +9,7 @@
         {
             @foreach (var product in Model)
             {
-                <a href="Products?id=@product.Id">
+                <a asp-action="Index" asp-controller="Products" asp-route-id=@product.Id>
                     <div class="search-result">
                         <div class="data">
                             <img src="@product.PathToPicture" class="picture" />

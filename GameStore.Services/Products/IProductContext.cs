@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GameStore.Models.Products
+namespace GameStore.Services.Products
 {
     /// <summary>
     /// It represents methods that must be implemented in classes that represent working with products database.
@@ -15,19 +15,19 @@ namespace GameStore.Models.Products
         int AddProduct(Product product);
 
         /// <summary>
-        /// Remove product from DB.
+        /// Removes product from DB.
         /// </summary>
         /// <param name="id">Product ID to delete.</param>
         void DeleteProduct(int id);
 
         /// <summary>
-        /// Select all product that contains in DB.
+        /// Selects all product that contains in DB.
         /// </summary>
         /// <returns>List of all products.</returns>
         IEnumerable<Product> GetAllProducts();
 
         /// <summary>
-        /// Select count of products.
+        /// Selects count of products.
         /// </summary>
         /// <returns>Count of products.</returns>
         int GetCountOfProducts();

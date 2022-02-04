@@ -1,11 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-namespace GameStore.Models.Users
+namespace GameStore.Services.Users
 {
     /// <summary>
     /// Work with DB by EntityFrameworkCore.
@@ -19,6 +17,7 @@ namespace GameStore.Models.Users
         public UserContext(DbContextOptions<UserContext> options)
             : base(options)
         {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
@@ -89,6 +88,7 @@ namespace GameStore.Models.Users
         {
             modelBuilder.Entity<Role>().HasKey(u => u.Id);
             modelBuilder.Entity<User>().HasKey(u => u.Id);
+            modelBuilder.Entity<User>().HasOne(u => u.Role).WithMany(r => r.Users).HasForeignKey(u => u.RoleId);
 
             var admin = new Role() { Id = 1, Name = "admin" };
             var user = new Role() { Id = 2, Name = "user" };

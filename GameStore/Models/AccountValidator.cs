@@ -12,6 +12,9 @@ namespace GameStore
     /// </summary>
     public sealed class AccountValidator
     {
+        private static readonly string _loginPattern = "[A-Za-z0-9_]{4,20}";
+        private static readonly string _passwordPattern = ".{6,20}";
+
         public bool VerifyData(string login, string password, string confirmPassword) => VerifyLogin(login) && VerifyPassword(password) && VerifyConfirmPassword(password, confirmPassword);
 
         /// <summary>
@@ -28,10 +31,7 @@ namespace GameStore
                 throw new ArgumentNullException(nameof(login));
             }
 
-            Regex reg = new Regex("[A-Za-z0-9_]{4,20}", RegexOptions.Compiled);
-            Match match = reg.Match(login);
-
-            return match.Success && login.Length <= 20;
+            return MathcString(login, _loginPattern);
         }
 
         /// <summary>
@@ -48,9 +48,7 @@ namespace GameStore
                 throw new ArgumentNullException(nameof(password));
             }
 
-            Regex reg = new Regex(".{6,20}", RegexOptions.Compiled);
-            Match match = reg.Match(password);
-            return match.Success && password.Length <= 20;
+            return MathcString(password, _passwordPattern);
         }
 
         /// <summary>
@@ -77,5 +75,7 @@ namespace GameStore
 
             return result;
         }
+
+        private static bool MathcString(string data, string pattern) => Regex.IsMatch(data, pattern, RegexOptions.Compiled);
     }
 }
