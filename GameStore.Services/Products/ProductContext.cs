@@ -69,6 +69,8 @@ namespace GameStore.Services.Products
 
             this.Products.Update(product);
 
+            this.Products.Update(product);
+
             this.SaveChanges();
         }
 

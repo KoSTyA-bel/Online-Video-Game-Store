@@ -26,7 +26,7 @@ namespace GameStore
 
             // Databases.
             services.AddDbContext<IUserContext, UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Users")), ServiceLifetime.Singleton);
-            services.AddDbContext<IProductContextAsync, ProductContextAsync>(options => options.UseSqlServer(Configuration.GetConnectionString("Products")), ServiceLifetime.Singleton);
+            services.AddDbContext<IProductContextAsync, ProductContextAsync>(options => options.UseSqlServer(Configuration.GetConnectionString("Products")), ServiceLifetime.Scoped);
 
             // All for user servises.
             services.AddTransient<IUserService, UserService>();
