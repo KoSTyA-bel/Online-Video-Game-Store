@@ -32,7 +32,7 @@
         /// </summary>
         /// <param name="login">User login.</param>
         /// <param name="password">User password.</param>
-        /// <returns></returns>
+        /// <returns>Id of registered user.</returns>
         int RegistrUser(string login, string password);
 
         /// <summary>

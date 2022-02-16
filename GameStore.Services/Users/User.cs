@@ -12,14 +12,14 @@ namespace GameStore.Services.Users
         private byte[] _password = null;
 
         /// <summary>
-        /// Creates a new instance of the class <see cref="User"/>.
+        /// Initializes a new instance of the <see cref="User"/> class.
         /// </summary>
         public User()
         {
         }
 
         /// <summary>
-        /// Creates a new instance of the class <see cref="User"/>
+        /// Initializes a new instance of the <see cref="User"/> class.
         /// </summary>
         /// <param name="login">User login.</param>
         /// <param name="password">User password.</param>
@@ -34,17 +34,17 @@ namespace GameStore.Services.Users
         }
 
         /// <summary>
-        /// User id.
+        /// Gets or sets user id.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// User login.
+        /// Gets or sets user login.
         /// </summary>
         public string Login { get; set; }
 
         /// <summary>
-        /// User password.
+        /// Gets or sets user password.
         /// </summary>
         public byte[] Password 
         { 
@@ -59,12 +59,12 @@ namespace GameStore.Services.Users
         }
 
         /// <summary>
-        /// Id of user role.
+        /// Gets or sets id of user role.
         /// </summary>
         public int? RoleId { get; set; }
 
         /// <summary>
-        /// User role.
+        /// Gets or sets user role.
         /// </summary>
         public Role Role { get; set; }
 
@@ -72,6 +72,6 @@ namespace GameStore.Services.Users
         /// Changes the user's password.
         /// </summary>
         /// <param name="newPassword">New password.</param>
-        public void ChangePassword(string newPassword) => _password = newPassword.GetHash();
+        public void ChangePassword(string newPassword) => _password = newPassword.GetMD5Hash();
     }
 }

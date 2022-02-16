@@ -8,9 +8,10 @@ namespace GameStore.Services.Products
 {
     public class ProductServiceAsync : ProductService, IProductServiceAsync
     {
-        IProductContextAsync _context;
+        private IProductContextAsync _context;
 
-        public ProductServiceAsync(IProductContextAsync context) : base(context)
+        public ProductServiceAsync(IProductContextAsync context) 
+            : base(context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

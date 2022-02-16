@@ -6,10 +6,10 @@ namespace GameStore.Services.Products
     /// <summary>
     /// Class-container of product information.
     /// </summary>
-    public class Product: IEquatable<Product>
+    public class Product : IEquatable<Product>
     {
         /// <summary>
-        /// Crate a new instanse of <see cref="Product"/>.
+        /// Initializes a new instance of the <see cref="Product"/> class.
         /// </summary>
         public Product()
         {
@@ -19,8 +19,38 @@ namespace GameStore.Services.Products
         }
 
         /// <summary>
+        /// Gets or sets product id.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets product name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets product description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets product price.
+        /// </summary>
+        public decimal Price { get; set; }
+
+        /// <summary>
+        /// Gets or sets path to product picture.
+        /// </summary>
+        public string PathToPicture { get; set; }
+
+        public static bool operator ==(Product left, Product right) => left != null ? left.Equals(right) : right == null;
+
+        public static bool operator !=(Product left, Product right) => !(left == right);
+
+        /// <summary>
         /// Deconstructs an object.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1611:Element parameters should be documented", Justification = "<Ожидание>")]
         public void Deconstruct(out int id, out string name, out string desctipriptin, out decimal price, out string pathToPicture)
         {
             id = this.Id;
@@ -33,33 +63,8 @@ namespace GameStore.Services.Products
         /// <summary>
         /// Deconstructs an object.
         /// </summary>
+        /// <returns>Values.</returns>
         public (int id, string name, string description, decimal price, string pathToPicture) Deconstruct() => (this.Id, this.Name, this.Description, this.Price, this.PathToPicture);
-
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Product name.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Product description.
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Product price.
-        /// </summary>
-        public decimal Price { get; set; }
-
-        /// <summary>
-        /// Path to product picture.
-        /// </summary>
-        public string PathToPicture { get; set; }
-
-        public static bool operator ==(Product left, Product right) => left != null ? left.Equals(right) : right == null;
-
-        public static bool operator !=(Product left, Product right) => !(left == right);
 
         public override int GetHashCode()
         {
@@ -70,17 +75,7 @@ namespace GameStore.Services.Products
             return res ^= Description.Length;
         }
 
-        public override bool Equals(object obj)
-        {
-            try
-            {
-                return this.Equals((Product)obj);
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        public override bool Equals(object obj) => obj is Product product ? Equals(product) : false;
 
         public bool Equals(Product other)
         {
@@ -94,7 +89,11 @@ namespace GameStore.Services.Products
                 return false;
             }
 
-            return other.Id == this.Id && string.Equals(other.Description, this.Description) && string.Equals(other.Name, this.Name) && other.Price == this.Price && string.Equals(other.PathToPicture, this.PathToPicture);
+            return other.Id == this.Id 
+                && string.Equals(other.Description, this.Description) 
+                && string.Equals(other.Name, this.Name) 
+                && other.Price == this.Price 
+                && string.Equals(other.PathToPicture, this.PathToPicture);
         }
 
         public override string ToString() 

@@ -1,32 +1,32 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using GameStore.Services.Users;
-using Microsoft.Extensions.Logging;
 using GameStore.Services;
+using GameStore.Services.Users;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace GameStore.Controllers
 {
     public class AccountController : Controller
     {
-        protected readonly IUserService _userService;
-        protected readonly AccountValidator _validator;
-        protected readonly ILogger _logger;
-
-        protected AccountController(IUserService userService, AccountValidator validator)
-        {
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-        }
+        private readonly IUserService _userService;
+        private readonly AccountValidator _validator;
+        private readonly ILogger _logger;
 
         public AccountController(IUserService userService, AccountValidator validator, ILogger logger)
             : this(userService, validator)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        protected AccountController(IUserService userService, AccountValidator validator)
+        {
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
         [HttpGet]
@@ -50,7 +50,7 @@ namespace GameStore.Controllers
             if (!_validator.VerifyLogin(model.Login) || !_validator.VerifyPassword(model.Password))
             {
                 _logger?.LogInformation("Bad data");
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                ModelState.AddModelError(string.Empty, "Некорректные логин и(или) пароль");
                 return View(model);
             }
 
@@ -60,13 +60,13 @@ namespace GameStore.Controllers
             if (user == null)
             {
                 _logger?.LogInformation($"User with login: {model.Login}, not found");
-                ModelState.AddModelError("", "Пользователя, с введёнными вами данными, не существует");
+                ModelState.AddModelError(string.Empty, "Пользователя, с введёнными вами данными, не существует");
                 return View(model);
             }
 
-            if (user.Password.Equals(model.Password.GetHash()))
+            if (user.Password.Equals(model.Password.GetMD5Hash()))
             {
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                ModelState.AddModelError(string.Empty, "Некорректные логин и(или) пароль");
                 return View(model);
             }
 
@@ -104,7 +104,7 @@ namespace GameStore.Controllers
             if (!_validator.VerifyData(model.Login, model.Password, model.ConfirmPassword))
             {
                 _logger?.LogInformation("Bad data");
-                ModelState.AddModelError("", "Произошла ошибка сервера.");
+                ModelState.AddModelError(string.Empty, "Произошла ошибка сервера.");
                 return View(model);
             }
 
@@ -120,21 +120,21 @@ namespace GameStore.Controllers
             }
 
             _logger?.LogInformation($"Login {model.Login} is claimed");
-            ModelState.AddModelError("", "Login is claimed/");
+            ModelState.AddModelError(string.Empty, "Login is claimed/");
 
             return View(model);
         }
 
         public async Task<IActionResult> Logout()
         {
-            _logger.LogInformation($"User {User.Identity.Name} logged out");
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Products");
+            this._logger.LogInformation($"User {this.User.Identity.Name} logged out");
+            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return this.RedirectToAction("Index", "Products");
         }
 
         protected async Task Authenticate(User user)
         {
-            _logger?.LogInformation($"Authenticate user {user.Login}");
+            this._logger?.LogInformation($"Authenticate user {user.Login}");
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
@@ -143,7 +143,7 @@ namespace GameStore.Controllers
 
             var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
     }
 }

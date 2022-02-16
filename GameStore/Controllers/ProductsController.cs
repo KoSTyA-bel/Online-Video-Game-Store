@@ -1,19 +1,19 @@
-﻿using GameStore.Services.Products;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using GameStore.Services.Products;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GameStore.Controllers
 {
     public class ProductsController : Controller
     {
-        private const long BYTES_OF_10_MB = 10485760;
-        private IProductServiceAsync _service;
-        private IWebHostEnvironment _appEnvironment;
+        private const long BytesOf10MB = 10 * 1024 * 1024;
+        private readonly IProductServiceAsync _service;
+        private readonly IWebHostEnvironment _appEnvironment;
 
         public ProductsController(IWebHostEnvironment appEnvironment, IProductServiceAsync service)
         {
@@ -38,16 +38,18 @@ namespace GameStore.Controllers
         }
 
         [HttpPost]
-        public ActionResult Search(string name)
+        public async Task<IActionResult> Search(string name)
         {
+            var data = await _service.GetAllProductsAsync().ConfigureAwait(false);
+
             if (string.IsNullOrEmpty(name))
             {
-                return PartialView(_service.GetAllProducts());
+                return PartialView(data);
             }
 
             name = name.ToUpper();
 
-            return PartialView(_service.GetAllProducts().Where(product => product.Name.ToUpper().Contains(name)));
+            return PartialView(data.Where(product => product.Name.ToUpper().Contains(name)));
         }
 
         [HttpGet]
@@ -64,17 +66,17 @@ namespace GameStore.Controllers
         {
             if (model.Picture is null)
             {
-                ModelState.AddModelError("", "Не выбрана картинка продукта.");
+                ModelState.AddModelError(string.Empty, "Не выбрана картинка продукта.");
                 return View();
             }
             else if (model.Picture.ContentType != "image/jpeg")
             {
-                ModelState.AddModelError("", "Выбран файл запрещённого разрешения.");
+                ModelState.AddModelError(string.Empty, "Выбран файл запрещённого разрешения.");
                 return View();
             }
-            else if (model.Picture.Length > BYTES_OF_10_MB)
+            else if (model.Picture.Length > BytesOf10MB)
             {
-                ModelState.AddModelError("", "Файл весит слишком много.");
+                ModelState.AddModelError(string.Empty, "Файл весит слишком много.");
                 return View();
             }
             else
@@ -82,19 +84,17 @@ namespace GameStore.Controllers
                 string picture = "images/" + model.Picture.FileName;
                 string path = Path.Combine(_appEnvironment.WebRootPath, picture);
 
-                using (var fileStream = new FileStream(path, FileMode.Create))
-                {
-                    await model.Picture.CopyToAsync(fileStream);
+                using var fileStream = new FileStream(path, FileMode.Create);
+                await model.Picture.CopyToAsync(fileStream);
 
-                    if (!_service.CreateProduct(model.Name, model.Description, model.Price, picture))
-                    {
-                        ModelState.AddModelError("", "Невозможно создать новыйпродукт.");
-                        return View();
-                    }
+                if (!_service.CreateProduct(model.Name, model.Description, model.Price, picture))
+                {
+                    ModelState.AddModelError(string.Empty, "Невозможно создать новыйпродукт.");
+                    return View();
                 }
             }
 
-            var product =  _service.GetLastProduct();
+            var product = _service.GetLastProduct();
 
             return Redirect($"/Products?id={product.Id}");
         }
@@ -133,8 +133,7 @@ namespace GameStore.Controllers
             }
 
             if (_service.RemoveProduct(product))
-            {
-                
+            {                
                 return RedirectToAction("Index");
             }
 

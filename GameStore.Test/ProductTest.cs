@@ -1,5 +1,5 @@
 ﻿using System;
-using GameStore.Models;
+using GameStore.Services.Products;
 using System.Reflection;
 using NUnit.Framework;
 using System.Collections.Generic;

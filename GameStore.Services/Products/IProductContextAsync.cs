@@ -28,7 +28,7 @@ namespace GameStore.Services.Products
         /// <summary>
         /// Removes product from DB.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Product id.</param>
         /// <returns>Task that will perform the removal of the product.</returns>
         public Task DeleteProductAsync(int id);
 
@@ -41,7 +41,7 @@ namespace GameStore.Services.Products
         /// <summary>
         /// Selects count of products.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Count of products in DB.</returns>
         public Task<int> GetCountOfProductsAsync();
     }
 }

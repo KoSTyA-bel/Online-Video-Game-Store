@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using GameStore.Models;
+using GameStore.Services.Products;
 using System.Threading.Tasks;
 
 namespace GameStore.Test
@@ -17,7 +17,7 @@ namespace GameStore.Test
         [TestCase("RemoveProduct", typeof(bool))]
         [TestCase("TryShowProduct", typeof(bool))]
         [TestCase("UpdateProduct", typeof(bool))]
-        [TestCase("GetLastProduct", typeof(Task<Product>))]
+        [TestCase("GetLastProduct", typeof(Product))]
         public void CheckingForMethods(string name, Type type)
         {
             var methodInfo = typeof(IProductService).GetMethod(name);

@@ -12,6 +12,7 @@ namespace GameStore.Controllers
     public class CartController : Controller
     {
         private readonly IProductService _productService;
+        private readonly string _sessionCartKey = "Cart";
 
         public CartController(IProductService productService)
         {
@@ -21,20 +22,20 @@ namespace GameStore.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(HttpContext.Session.Get<Cart>("Cart") ?? new Cart());
+            return View(HttpContext.Session.Get<Cart>(_sessionCartKey) ?? new Cart());
         }
 
         [HttpPost]
         public IActionResult AddProductToCart(int id)
         {
-            var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
+            var cart = HttpContext.Session.Get<Cart>(_sessionCartKey) ?? new Cart();
 
             if (_productService.TryShowProduct(id, out Product product))
             {
                 cart.AddProductToCart(product);
             }
 
-            HttpContext.Session.Set<Cart>("Cart", cart);
+            HttpContext.Session.Set<Cart>(_sessionCartKey, cart);
 
             return Accepted((object)"Продукт успешно добавлен");
         }
@@ -44,7 +45,7 @@ namespace GameStore.Controllers
         {
             var cart = new Cart();
 
-            HttpContext.Session.Set<Cart>("Cart", cart);
+            HttpContext.Session.Set<Cart>(_sessionCartKey, cart);
 
             return RedirectToAction("Index");
         }
@@ -52,14 +53,14 @@ namespace GameStore.Controllers
         [HttpPost]
         public IActionResult RemoveProductFromCart(int id)
         {
-            var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
+            var cart = HttpContext.Session.Get<Cart>(_sessionCartKey) ?? new Cart();
 
             if (_productService.TryShowProduct(id, out Product product))
             {
                 cart.RemoveProductFromCart(product);
             }
 
-            HttpContext.Session.Set<Cart>("Cart", cart);
+            HttpContext.Session.Set<Cart>(_sessionCartKey, cart);
 
             return RedirectToAction("Index");
         }

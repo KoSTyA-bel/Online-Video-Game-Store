@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GameStore.Services\GameStore.Services.csproj" />
     <ProjectReference Include="..\GameStore\GameStore.csproj" />
   </ItemGroup>
 

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using GameStore.Models.Users;
+using GameStore.Services.Users;
+using GameStore.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -42,32 +43,23 @@ namespace GameStore.Test
         [TestCaseSource(nameof(GetUserLogins))]
         public void CheckThatUsersInDb((string login, string password) data)
         {
-            Assert.IsTrue(_service.ContainsUser(data.login).Result);
+            Assert.IsTrue(_service.ContainsUser(data.login));
         }
 
         [TestCaseSource(nameof(GetUserLogins))]
         public void GetUserTrueTest((string login, string password) data)
         {
-            var user = _service.GetUser(data.login).Result;
+            var user = _service.GetUser(data.login);
 
             Assert.AreEqual(data.login, user.Login);
-            Assert.AreEqual(data.password, user.Password);
-        }
-
-        [TestCaseSource(nameof(GetUserLogins))]
-        public void GetUserWithPasswordTrueTest((string login, string password) data)
-        {
-            var user = _service.GetUser(data.login, data.password).Result;
-
-            Assert.AreEqual(data.login, user.Login);
-            Assert.AreEqual(data.password, user.Password);
+            Assert.AreEqual(data.password.GetMD5Hash(), user.Password);
         }
 
         [Test]
         public void CheckThatServiseGetRoles()
         {
-            var admin = _service.TryGetRole(1).Result;
-            var user = _service.TryGetRole(2).Result;
+            var admin = _service.TryGetRole(1);
+            var user = _service.TryGetRole(2);
 
             Assert.AreEqual("admin", admin.Name);
             Assert.AreEqual("user", user.Name);

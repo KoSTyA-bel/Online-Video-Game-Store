@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Security.Cryptography;
 
 namespace GameStore.Services.Users
 {
@@ -12,7 +10,7 @@ namespace GameStore.Services.Users
         private IUserContext _context;
 
         /// <summary>
-        /// Initializes a new class object <see cref="UserService"/>.
+        /// Initializes a new instance of the <see cref="UserService"/> class.
         /// </summary>
         /// <param name="context">Database.</param>
         public UserService(IUserContext context)

@@ -1,12 +1,12 @@
+using GameStore.Services.Products;
+using GameStore.Services.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using GameStore.Services.Users;
 using Microsoft.Extensions.Logging;
-using GameStore.Services.Products;
 
 namespace GameStore
 {
@@ -25,12 +25,11 @@ namespace GameStore
             services.AddControllersWithViews();
 
             // Databases.
-            services.AddDbContext<IUserContext, UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Users")));
-            services.AddDbContext<ProductContextAsync>(options => options.UseSqlServer(Configuration.GetConnectionString("Products")));
+            services.AddDbContext<IUserContext, UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Users")), ServiceLifetime.Singleton);
+            services.AddDbContext<IProductContextAsync, ProductContextAsync>(options => options.UseSqlServer(Configuration.GetConnectionString("Products")), ServiceLifetime.Singleton);
 
             // All for user servises.
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IProductContextAsync, ProductContextAsync>();
             services.AddTransient<IProductServiceAsync, ProductServiceAsync>();
             services.AddTransient<IProductService>(porovider => (IProductService)porovider.GetService(typeof(IProductServiceAsync)));
             services.AddTransient(provider => LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("App logger"));
@@ -40,13 +39,14 @@ namespace GameStore
             services.AddSession();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options => //CookieAuthenticationOptions
+            .AddCookie(options =>
             {
+                // CookieAuthenticationOptions
                 options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)
+        public void Configure(IApplicationBuilder app, ILogger logger)
         {
             logger.LogInformation("App starting");
 

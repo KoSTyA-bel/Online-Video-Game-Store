@@ -8,7 +8,7 @@ namespace GameStore.Services.Users
     public class Role
     {
         /// <summary>
-        /// Create a new instanse of <see cref="Role"/>.
+        /// Initializes a new instance of the <see cref="Role"/> class.
         /// </summary>
         public Role()
         {
@@ -16,17 +16,17 @@ namespace GameStore.Services.Users
         }
 
         /// <summary>
-        /// Role Id.
+        /// Gets or sets role Id.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Role name.
+        /// Gets or sets role name.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// List of users with this role.
+        /// Gets or sets list of users with this role.
         /// </summary>
         public List<User> Users { get; set; }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace GameStore.Services.Products
 {
     /// <summary>
-    /// Concreate service builder
+    /// Concreate service builder.
     /// </summary>
     public class ConcreateProductServiceBuilder : ProductServiceBuilder
     {

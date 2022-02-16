@@ -26,7 +26,7 @@ namespace GameStore.Services.Users
             {
                 CommandText = "InsertUser",
                 Connection = connection,
-                CommandType = CommandType.StoredProcedure
+                CommandType = CommandType.StoredProcedure,
             };
 
             command.Parameters.Add(new SqlParameter("@Login", SqlDbType.NVarChar));
@@ -58,7 +58,7 @@ namespace GameStore.Services.Users
             {
                 CommandText = "UpdateUser",
                 Connection = connection,
-                CommandType = CommandType.StoredProcedure
+                CommandType = CommandType.StoredProcedure,
             };
 
             command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int));

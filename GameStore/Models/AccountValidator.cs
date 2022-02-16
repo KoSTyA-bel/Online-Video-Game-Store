@@ -12,8 +12,8 @@ namespace GameStore
     /// </summary>
     public sealed class AccountValidator
     {
-        private static readonly string _loginPattern = "[A-Za-z0-9_]{4,20}";
-        private static readonly string _passwordPattern = ".{6,20}";
+        private static readonly string _loginPattern = "^([A-Za-z0-9_]{4,20})$";
+        private static readonly string _passwordPattern = "^(.{6,20})$";
 
         public bool VerifyData(string login, string password, string confirmPassword) => VerifyLogin(login) && VerifyPassword(password) && VerifyConfirmPassword(password, confirmPassword);
 

@@ -7,14 +7,14 @@ namespace GameStore.Services.Users
     /// <summary>
     /// Work with DB by ADO.Net with using tasks.
     /// </summary>
-    public class UserContextADOThreading: UserContextADO
+    public class UserContextADOThreading : UserContextADO
     {
         private readonly AutoResetEvent handler = new AutoResetEvent(true);
 
         /// <summary>
-        /// Crates a new instanse of <see cref="UserContextADOThreading"/>.
+        /// Initializes a new instance of the <see cref="UserContextADOThreading"/> class.
         /// </summary>
-        /// <param name="connectionString"></param>
+        /// <param name="connectionString">Connection string.</param>
         public UserContextADOThreading(string connectionString)
             : base(connectionString)
         {

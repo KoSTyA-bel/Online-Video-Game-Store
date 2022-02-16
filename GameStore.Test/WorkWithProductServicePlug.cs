@@ -1,5 +1,5 @@
 ﻿using System;
-using GameStore.Models;
+using GameStore.Services.Products;
 
 namespace GameStore.Test
 {

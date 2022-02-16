@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Collections.Generic;
 
 namespace GameStore.Services.Products
 {
@@ -19,7 +19,7 @@ namespace GameStore.Services.Products
         private readonly string _countOfProducts = "SELECT COUNT(ID) FROM Products";
 
         /// <summary>
-        /// Crate a new instance of <see cref="ProductContextADO"/>.
+        /// Initializes a new instance of the <see cref="ProductContextADO"/> class.
         /// </summary>
         /// <param name="connectionString">DB connection string.</param>
         public ProductContextADO(string connectionString)

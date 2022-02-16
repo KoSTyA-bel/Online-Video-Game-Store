@@ -11,7 +11,7 @@ namespace GameStore.Services.Products
     public class ProductContext : DbContext, IProductContext
     {
         /// <summary>
-        /// Create a new instance of <see cref="ProductContext"/>.
+        /// Initializes a new instance of the <see cref="ProductContext"/> class.
         /// </summary>
         /// <param name="options">Options for creating context.</param>
         public ProductContext(DbContextOptions options)
@@ -21,7 +21,7 @@ namespace GameStore.Services.Products
         }
 
         /// <summary>
-        /// A set of data stored in the DB.
+        /// Gets or sets a set of data stored in the DB.
         /// </summary>
         public DbSet<Product> Products { get; set; }
 

@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services.Products
 {
@@ -13,10 +13,11 @@ namespace GameStore.Services.Products
     public class ProductContextAsync : ProductContext, IProductContextAsync
     {
         /// <summary>
-        /// Creates a new instanse of class <see cref=">ProductContextAsync"/>.
+        /// Initializes a new instance of the <see cref="ProductContextAsync"/> class.
         /// </summary>
         /// <param name="options">Database context options.</param>
-        public ProductContextAsync(DbContextOptions options) : base(options)
+        public ProductContextAsync(DbContextOptions options) 
+            : base(options)
         {
         }
 
@@ -25,7 +26,7 @@ namespace GameStore.Services.Products
         {
             await this.Products.AddAsync(product);
             var last = await this.Products.LastOrDefaultAsync();
-            return last is null ? -1: last.Id;
+            return last is null ? -1 : last.Id;
         }
 
         /// <inheritdoc/>

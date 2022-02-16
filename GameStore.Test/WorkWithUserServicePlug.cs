@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GameStore.Models.Users;
+using GameStore.Services.Users;
 
 namespace GameStore.Test
 {
@@ -34,11 +34,6 @@ namespace GameStore.Test
         public void TryGetRole()
         {
             _service.TryGetRole(null);
-        }
-
-        public void User()
-        {
-            _service.GetUser(null, null);
         }
     }
 }

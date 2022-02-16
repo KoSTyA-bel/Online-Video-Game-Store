@@ -8,7 +8,7 @@ namespace GameStore.Services.Products
 {
     public class ProductContextADOThreading : ProductContextADO, IProductContext
     {
-        private object locker = new();
+        private static readonly object Locker = new ();
 
         public ProductContextADOThreading(string connectionString)
             : base(connectionString)
@@ -19,22 +19,20 @@ namespace GameStore.Services.Products
         {
             var task = Task<int>.Factory.StartNew(() => 
             { 
-                lock (locker)
+                lock (Locker)
                 {
                     return base.AddProduct(product);
                 }
             });
 
-            task.Wait();
-
-            return task.Result;
+            return task.GetAwaiter().GetResult();
         }
 
         public override void DeleteProduct(int id)
         {
             Task.Factory.StartNew(() =>
             {
-                lock (locker)
+                lock (Locker)
                 {
                     base.DeleteProduct(id);
                 }
@@ -45,52 +43,46 @@ namespace GameStore.Services.Products
         {
             var task = Task<IEnumerable<Product>>.Factory.StartNew(() =>
             {
-                lock (locker)
+                lock (Locker)
                 {
                     return base.GetAllProducts();
                 }
             });
 
-            task.Wait();
-
-            return task.Result;
+            return task.GetAwaiter().GetResult();
         }
 
         public override int GetCountOfProducts()
         {
             var task = Task<int>.Factory.StartNew(() => 
             {
-                lock (locker)
+                lock (Locker)
                 {
                     return base.GetCountOfProducts();
                 }
             });
 
-            task.Wait();
-
-            return task.Result;
+            return task.GetAwaiter().GetResult();
         }
 
         public override Product SelectProduct(int id)
         {
             var task = Task<Product>.Factory.StartNew(() => 
             {
-                lock (locker)
+                lock (Locker)
                 {
                     return base.SelectProduct(id);
                 }
             });
 
-            task.Wait();
-
-            return task.Result;
+            return task.GetAwaiter().GetResult();
         }
 
         public override void UpdateProduct(Product product)
         {
             Task.Factory.StartNew(() =>
             {
-                lock (locker)
+                lock (Locker)
                 {
                     base.UpdateProduct(product);
                 }

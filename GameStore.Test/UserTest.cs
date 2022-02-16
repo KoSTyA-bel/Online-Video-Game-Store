@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using System.Reflection;
-using GameStore.Models.Users;
+using GameStore.Services.Users;
 
 namespace GameStore.Test
 {
@@ -14,7 +14,7 @@ namespace GameStore.Test
     {
         [TestCase("Id", typeof(int))]
         [TestCase("Login", typeof(string))]
-        [TestCase("Password", typeof(string))]
+        [TestCase("Password", typeof(byte[]))]
         [TestCase("Role", typeof(Role))]
         [TestCase("RoleId", typeof(int?))]
         public void TestPublicInstanceProperty(string name, Type type)

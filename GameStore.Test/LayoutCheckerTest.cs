@@ -11,7 +11,7 @@ namespace GameStore.Test
         [TestCase(false, ExpectedResult = "_NonAuthorize")]
         public string GetLayoutTest(bool boolean) => LayoutChecker.GetLayout(boolean);
 
-        [TestCase(false, ExpectedResult = "_Layout")]
+        [TestCase(ExpectedResult = "_Layout")]
         public string GetLayoutTest() => LayoutChecker.GetLayout();
     }
 }

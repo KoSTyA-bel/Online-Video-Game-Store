@@ -49,13 +49,13 @@ namespace GameStore.Services.Users
         /// <summary>
         /// Update user data.
         /// </summary>
-        /// <param name="user">The user whose data needs to be updated</param>
+        /// <param name="user">The user whose data needs to be updated.</param>
         void UpdateUser(User user);
 
         /// <summary>
         /// Selects role.
         /// </summary>
-        /// <param name="id">Role id</param>
+        /// <param name="id">Role id.</param>
         /// <returns>If role with this id exists, then the role, otherwise null.</returns>
         Role SelectRole(int id);
     }

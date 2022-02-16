@@ -12,7 +12,7 @@ namespace GameStore.Services.Products
         private IProductContext _context;
 
         /// <summary>
-        /// Creates a new instance of the class <see cref="ProductService"/>.
+        /// Initializes a new instance of the <see cref="ProductService"/> class.
         /// </summary>
         /// <param name="context">Database context.</param>
         public ProductService(IProductContext context)
@@ -55,7 +55,8 @@ namespace GameStore.Services.Products
             if (product is null)
             {
                 throw new ArgumentNullException(nameof(product));
-                //return false;
+
+                // return false;
             }
 
             _context.UpdateProduct(product);

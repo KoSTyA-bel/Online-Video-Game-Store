@@ -10,18 +10,20 @@ namespace GameStore.Services.Users
     /// </summary>
     public sealed class UserContext : DbContext, IUserContext
     {
+        /// 
         /// <summary>
-        /// Create a new instanse of <see cref="UserContext"/>.
+        /// Initializes a new instance of the <see cref="UserContext"/> class.
         /// </summary>
         /// <param name="options">Options for creating context.</param>
         public UserContext(DbContextOptions<UserContext> options)
             : base(options)
         {
-            //Database.EnsureDeleted();
+            // Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
         public DbSet<Role> Roles { get; set; }
+
         public DbSet<User> Users { get; set; }
 
         /// <inheritdoc/>
